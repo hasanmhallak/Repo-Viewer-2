@@ -1,20 +1,18 @@
-import 'storage.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../local_service.dart';
 
-abstract class SecureStorage {
-  const factory SecureStorage() = Storage;
+class SecureStorage implements LocalService {
+  const SecureStorage();
 
-  /// Encrypts and saves data in local storage.
-  ///
-  /// Can throw [PlatformException].
-  Future<void> save(String data);
+  String get _key => 'data';
+  FlutterSecureStorage get _storage => const FlutterSecureStorage();
 
-  /// Decrypt and returns data or `null` if data is not in the storage.
-  ///
-  /// Can throw [PlatformException].
-  Future<String?> read();
+  @override
+  Future<void> delete() => _storage.delete(key: _key);
 
-  /// Clears local storage.
-  ///
-  /// Can throw [PlatformException].
-  Future<void> delete();
+  @override
+  Future<String?> read() => _storage.read(key: _key);
+
+  @override
+  Future<void> save(String data) => _storage.write(key: _key, value: data);
 }
