@@ -1,16 +1,13 @@
 import 'package:dartz/dartz.dart';
 import 'package:oauth2/oauth2.dart';
-import 'package:repo_viewer/auth/domain/auth_failure.dart';
 
+import '../domain/auth_failure.dart';
 import 'keys.dart';
 
 class RemoteService {
   final authorizationEndpoint = Uri.parse('https://gitlab.com/oauth/authorize');
-
   final tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');
-
   final redirectedUrl = Uri.parse('https://localhost:3000/callback');
-
   final scopes = ['read_user', 'read_repository'];
 
   /// Creates a new grant.
@@ -24,10 +21,11 @@ class RemoteService {
   }
 
   /// Returns the URL to which the resource owner should be redirected to authorize this client.
-  Uri getAuthorizationUrl(AuthorizationCodeGrant grant) {
+  Uri getAuthUrl(AuthorizationCodeGrant grant) {
     return grant.getAuthorizationUrl(redirectedUrl, scopes: scopes);
   }
 
+  /// Returns [Credentials] or [AuthFailure].
   Future<Either<AuthFailure, Credentials>> getCredentials(
     AuthorizationCodeGrant grant,
     Map<String, String> parameters,
