@@ -30,4 +30,6 @@ class AuthRepository {
   Future<bool> get isSignedIn {
     return getCredentials().then((credentials) => credentials != null);
   }
+
+  Future<void> signin() async {}
 }
