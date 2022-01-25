@@ -6,9 +6,9 @@ import '../../core/infrastructure/extinstions/dio_no_internet.dart';
 import '../domain/auth_failure.dart';
 import 'keys.dart';
 
-class RemoteService {
+class AuthRemoteService {
   final Dio _dio;
-  RemoteService(this._dio);
+  AuthRemoteService(this._dio);
 
   final authorizationEndpoint = Uri.parse('https://gitlab.com/oauth/authorize');
   final tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');

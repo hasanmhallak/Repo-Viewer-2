@@ -1,7 +1,7 @@
 import 'credentials_storage/secure_storage.dart';
 
-abstract class LocalService {
-  const factory LocalService() = SecureStorage;
+abstract class AuthLocalService {
+  const factory AuthLocalService() = SecureStorage;
 
   /// Encrypts and saves data in local storage.
   ///
