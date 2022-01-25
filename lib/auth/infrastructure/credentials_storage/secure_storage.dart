@@ -1,7 +1,7 @@
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../local_service.dart';
+import '../auth_local_service.dart';
 
-class SecureStorage implements LocalService {
+class SecureStorage implements AuthLocalService {
   const SecureStorage();
 
   String get _key => 'data';
