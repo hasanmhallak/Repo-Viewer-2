@@ -1,9 +1,8 @@
-import 'dart:ffi';
-
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:oauth2/oauth2.dart';
 
+import '../../core/infrastructure/extinstions/dio_no_internet.dart';
 import '../domain/auth_failure.dart';
 import 'keys.dart';
 
@@ -48,7 +47,7 @@ class RemoteService {
     }
   }
 
-  /// Refreshes and Returns [Credentials] or [AuthFailure].
+  /// Refreshes credentials.
   Future<Either<AuthFailure, Credentials>> refreshCredentials(
     Credentials oldCredentials,
   ) async {
@@ -65,6 +64,9 @@ class RemoteService {
     }
   }
 
+  /// Revokes [accessToken].
+  ///
+  /// Note that access token will `NOT` be revoked if there's no internet connection.
   Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
     try {
       final response = await _dio.post(
@@ -75,8 +77,21 @@ class RemoteService {
           'token': credentials.accessToken
         },
       );
-    } on DioError {
-      rethrow;
+      if (response.statusCode == 200) {
+        return right(unit);
+      } else {
+        return left(
+          AuthFailure.server(
+              '${response.statusCode}: ${response.statusMessage}'),
+        );
+      }
+    } on DioError catch (e) {
+      if (e.isNoConnection) {
+        return left(const AuthFailure.server('No internet connection.'));
+      } else {
+        // Unexpected Error.
+        rethrow;
+      }
     }
   }
 }
