@@ -17,7 +17,7 @@ class AuthRemoteService {
   final scopes = ['read_user', 'read_repository'];
 
   /// Creates a new grant.
-  AuthorizationCodeGrant grant() {
+  AuthorizationCodeGrant getGrant() {
     return AuthorizationCodeGrant(
       identifier,
       authorizationEndpoint,
