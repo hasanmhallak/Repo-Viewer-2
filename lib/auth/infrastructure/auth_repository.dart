@@ -32,6 +32,7 @@ class AuthRepository {
     return getCredentials().then((credentials) => credentials != null);
   }
 
+  /// test
   Future<void> signin(AuthHandler authHandler) async {
     final grant = _remoteService.getGrant();
     final authUri = _remoteService.getAuthUrl(grant);
