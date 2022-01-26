@@ -17,7 +17,11 @@ class AuthRemoteService {
   final _revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
   final _scopes = ['read_user', 'read_repository'];
 
-  /// Creates a new grant.
+  /// Creates a new grant which uses HTTP Basic authentication as defined in RFC 2617.
+  ///
+  /// This grant well then be used during the oAuth2 authentication proccess.
+  ///
+  /// A [codeVerifier] will be randomly generated which meet the requirements specified in RFC 7636.
   AuthorizationCodeGrant getGrant() {
     return AuthorizationCodeGrant(
       identifier,
@@ -28,17 +32,27 @@ class AuthRemoteService {
   }
 
   /// Returns the URL to which the resource owner should be redirected to authorize this client.
+  ///
+  /// After the authorization of this client, it will be redirected by the server to
+  /// a URL that holds the code in the [queryParameters] in which will be exchanged for
+  /// an accessToken.
+  ///
+  /// This [queryParameters] should be passed to `handleAuthorizationResponse` method for
+  /// handling the exchange proccess.
   Uri getAuthUrl(AuthorizationCodeGrant grant) {
     return grant.getAuthorizationUrl(_redirectedUrl, scopes: _scopes);
   }
 
-  /// Returns [Credentials] or [AuthFailure].
-  Future<Either<AuthFailure, Credentials>> getCredentials(
+  /// Processes the query parameters added to the redirected URL from the authorization server.
+  ///
+  /// Returns [AuthFailure] if [queryParams] is invalid according to the OAuth2 spec or if the
+  /// authorization server otherwise provides invalid responses.
+  Future<Either<AuthFailure, Credentials>> handleAuthorizationResponse(
     AuthorizationCodeGrant grant,
-    Map<String, String> parameters,
+    Map<String, String> queryParams,
   ) async {
     try {
-      final client = await grant.handleAuthorizationResponse(parameters);
+      final client = await grant.handleAuthorizationResponse(queryParams);
 
       return right(client.credentials);
     } on FormatException catch (e) {
@@ -48,7 +62,7 @@ class AuthRemoteService {
     }
   }
 
-  /// Refreshes credentials.
+  /// Returns a new set of refreshed credentials.
   Future<Either<AuthFailure, Credentials>> refreshCredentials(
     Credentials oldCredentials,
   ) async {
@@ -65,9 +79,11 @@ class AuthRemoteService {
     }
   }
 
-  /// Revokes [accessToken].
+  /// Performs a POST request to revoke [accessToken].
   ///
-  /// Note that access token will `NOT` be revoked if there's no internet connection.
+  /// Returns `Unit` if revocation was successful.
+  ///
+  /// Note that access token will NOT be revoked if there's no internet connection.
   Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
     try {
       final response = await _dio.post(
@@ -83,7 +99,8 @@ class AuthRemoteService {
       } else {
         return left(
           AuthFailure.server(
-              '${response.statusCode}: ${response.statusMessage}'),
+            '${response.statusCode}: ${response.statusMessage}',
+          ),
         );
       }
     } on DioError catch (e) {
