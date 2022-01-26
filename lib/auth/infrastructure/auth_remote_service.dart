@@ -10,25 +10,26 @@ class AuthRemoteService {
   final Dio _dio;
   AuthRemoteService(this._dio);
 
-  final authorizationEndpoint = Uri.parse('https://gitlab.com/oauth/authorize');
-  final tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');
-  final redirectedUrl = Uri.parse('https://localhost:3000/callback');
-  final revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
-  final scopes = ['read_user', 'read_repository'];
+  final _authorizationEndpoint =
+      Uri.parse('https://gitlab.com/oauth/authorize');
+  final _tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');
+  final _redirectedUrl = Uri.parse('https://localhost:3000/callback');
+  final _revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
+  final _scopes = ['read_user', 'read_repository'];
 
   /// Creates a new grant.
   AuthorizationCodeGrant getGrant() {
     return AuthorizationCodeGrant(
       identifier,
-      authorizationEndpoint,
-      tokenEndpoint,
+      _authorizationEndpoint,
+      _tokenEndpoint,
       secret: secret,
     );
   }
 
   /// Returns the URL to which the resource owner should be redirected to authorize this client.
   Uri getAuthUrl(AuthorizationCodeGrant grant) {
-    return grant.getAuthorizationUrl(redirectedUrl, scopes: scopes);
+    return grant.getAuthorizationUrl(_redirectedUrl, scopes: _scopes);
   }
 
   /// Returns [Credentials] or [AuthFailure].
@@ -70,7 +71,7 @@ class AuthRemoteService {
   Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
     try {
       final response = await _dio.post(
-        revokeEndpoint.toString(),
+        _revokeEndpoint.toString(),
         queryParameters: {
           'client_id': identifier,
           'client_secret': secret,
