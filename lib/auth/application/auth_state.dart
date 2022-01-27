@@ -1,5 +1,6 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:repo_viewer/auth/domain/entities/auth_failure.dart';
+
+import '../domain/entities/auth_failure.dart';
 
 part 'auth_state.freezed.dart';
 
