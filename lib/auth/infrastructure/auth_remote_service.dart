@@ -11,7 +11,7 @@ class AuthRemoteService {
   final _authorizationEndpoint =
       Uri.parse('https://gitlab.com/oauth/authorize');
   final _tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');
-  final _redirectedUrl = Uri.parse('https://localhost:3000/callback');
+  static final redirectedUrl = Uri.parse('https://localhost:3000/callback');
   final _revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
   final _scopes = ['read_user', 'read_repository'];
 
@@ -36,7 +36,7 @@ class AuthRemoteService {
   /// an accessToken.
   ///
   Uri getAuthUrl(AuthorizationCodeGrant grant) {
-    return grant.getAuthorizationUrl(_redirectedUrl, scopes: _scopes);
+    return grant.getAuthorizationUrl(redirectedUrl, scopes: _scopes);
   }
 
   /// Processes the query parameters added to the redirected URL from the authorization server.
