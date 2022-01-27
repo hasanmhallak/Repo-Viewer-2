@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:repo_viewer/auth/infrastructure/auth_remote_service.dart';
 import 'package:webview_flutter/webview_flutter.dart';
+
+import '../infrastructure/auth_remote_service.dart';
 
 class AuthWebView extends StatefulWidget {
   final String initialUrl;
