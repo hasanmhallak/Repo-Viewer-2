@@ -1,10 +1,11 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:repo_viewer/auth/application/auth_notifier.dart';
-import 'package:repo_viewer/auth/application/auth_state.dart';
-import 'package:repo_viewer/auth/domain/auth_repository.dart';
-import 'package:repo_viewer/auth/infrastructure/auth_local_service.dart';
-import 'package:repo_viewer/auth/infrastructure/auth_remote_service.dart';
+
+import '../application/auth_notifier.dart';
+import '../application/auth_state.dart';
+import '../domain/auth_repository.dart';
+import '../infrastructure/auth_local_service.dart';
+import '../infrastructure/auth_remote_service.dart';
 
 final authRepository = Provider<AuthRepository>((ref) {
   final _dio = Dio();
