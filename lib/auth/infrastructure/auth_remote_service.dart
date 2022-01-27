@@ -1,9 +1,7 @@
-import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:oauth2/oauth2.dart';
 
 import '../../core/infrastructure/extinstions/dio_no_internet.dart';
-import '../domain/auth_failure.dart';
 import 'keys.dart';
 
 class AuthRemoteService {
@@ -91,7 +89,10 @@ class AuthRemoteService {
       } else {
         // Api service did not provide any status code other than 200 in the docs.
         throw AuthorizationException(
-            response.statusCode.toString(), null, null);
+          response.statusCode.toString(),
+          null,
+          null,
+        );
       }
     } on DioError catch (e) {
       if (e.isNoConnection) {
