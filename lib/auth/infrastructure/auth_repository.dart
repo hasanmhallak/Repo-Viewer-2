@@ -2,7 +2,7 @@ import 'package:flutter/services.dart';
 import 'package:oauth2/oauth2.dart';
 import 'package:repo_viewer/auth/infrastructure/auth_local_service.dart';
 import 'package:repo_viewer/auth/infrastructure/auth_remote_service.dart';
-import 'package:repo_viewer/auth/infrastructure/type_defs.dart';
+import 'package:repo_viewer/auth/infrastructure/type_defs/type_defs.dart';
 
 class AuthRepository {
   final AuthLocalService _localService;
@@ -32,7 +32,6 @@ class AuthRepository {
     return getCredentials().then((credentials) => credentials != null);
   }
 
-  /// test
   Future<void> signin(AuthHandler authHandler) async {
     final grant = _remoteService.getGrant();
     final authUri = _remoteService.getAuthUrl(grant);

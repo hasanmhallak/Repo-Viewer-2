@@ -45,46 +45,37 @@ class AuthRemoteService {
 
   /// Processes the query parameters added to the redirected URL from the authorization server.
   ///
-  /// Returns [AuthFailure] if [queryParams] is invalid according to the OAuth2 spec or if the
+  /// Throws [FormatError] if [parameters] is invalid according to the OAuth2 spec or if the
   /// authorization server otherwise provides invalid responses.
-  Future<Either<AuthFailure, Credentials>> handleAuthorizationResponse(
+  ///
+  /// Throws [AuthorizationException] if the authorization fails.
+  Future<Credentials> handleAuthorizationResponse(
     AuthorizationCodeGrant grant,
     Map<String, String> queryParams,
   ) async {
-    try {
-      final client = await grant.handleAuthorizationResponse(queryParams);
-
-      return right(client.credentials);
-    } on FormatException catch (e) {
-      return left(AuthFailure.server(e.message));
-    } on AuthorizationException catch (e) {
-      return left(AuthFailure.server('${e.error}: ${e.description}'));
-    }
+    final client = await grant.handleAuthorizationResponse(queryParams);
+    return client.credentials;
   }
 
   /// Returns a new set of refreshed credentials.
-  Future<Either<AuthFailure, Credentials>> refreshCredentials(
+  ///
+  /// Throws an [AuthorizationException] if refreshing the credentials fails,
+  /// or a [FormatError] if the authorization server returns invalid responses.
+  Future<Credentials> refreshCredentials(
     Credentials oldCredentials,
   ) async {
-    try {
-      final refreshedCredentials = await oldCredentials.refresh(
-        identifier: identifier,
-        secret: secret,
-      );
-      return right(refreshedCredentials);
-    } on AuthorizationException catch (e) {
-      return left(AuthFailure.server('${e.error}: ${e.description}'));
-    } on FormatException catch (e) {
-      return left(AuthFailure.server(e.message));
-    }
+    return oldCredentials.refresh(
+      identifier: identifier,
+      secret: secret,
+    );
   }
 
   /// Performs a POST request to revoke [accessToken].
   ///
-  /// Returns `Unit` if revocation was successful.
+  /// Throws an [AuthorizationException] if revokeing did not succeeded.
   ///
   /// Note that access token will NOT be revoked if there's no internet connection.
-  Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
+  Future<void> signout(Credentials credentials) async {
     try {
       final response = await _dio.post(
         _revokeEndpoint.toString(),
@@ -95,17 +86,17 @@ class AuthRemoteService {
         },
       );
       if (response.statusCode == 200) {
-        return right(unit);
+        // Token revoked.
+        return;
       } else {
-        return left(
-          AuthFailure.server(
-            '${response.statusCode}: ${response.statusMessage}',
-          ),
-        );
+        // Api service did not provide any status code other than 200 in the docs.
+        throw AuthorizationException(
+            response.statusCode.toString(), null, null);
       }
     } on DioError catch (e) {
       if (e.isNoConnection) {
-        return left(const AuthFailure.server('No internet connection.'));
+        // token did not revoked.
+        return;
       } else {
         // Unexpected Error.
         rethrow;
