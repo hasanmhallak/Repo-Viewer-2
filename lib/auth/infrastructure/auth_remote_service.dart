@@ -35,8 +35,6 @@ class AuthRemoteService {
   /// a URL that holds the code in the [queryParameters] in which will be exchanged for
   /// an accessToken.
   ///
-  /// This [queryParameters] should be passed to `handleAuthorizationResponse` method for
-  /// handling the exchange proccess.
   Uri getAuthUrl(AuthorizationCodeGrant grant) {
     return grant.getAuthorizationUrl(_redirectedUrl, scopes: _scopes);
   }
