@@ -98,6 +98,7 @@ class AuthRemoteService {
         return;
       } else {
         // Unexpected Error.
+        // Let crash the app.
         rethrow;
       }
     }

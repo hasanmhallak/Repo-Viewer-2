@@ -1,13 +1,11 @@
-import 'dart:html';
-
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:oauth2/oauth2.dart';
-import 'package:repo_viewer/auth/domain/entities/auth_failure.dart';
 
 import '../infrastructure/auth_local_service.dart';
 import '../infrastructure/auth_remote_service.dart';
 import '../infrastructure/type_defs/type_defs.dart';
+import 'entities/auth_failure.dart';
 
 class AuthRepository {
   final AuthLocalService _localService;
@@ -75,14 +73,15 @@ class AuthRepository {
       );
     } on PlatformException catch (e) {
       return left(
-        AuthFailure.server('${e.code}: ${e.details}'),
+        AuthFailure.storage('${e.code}: ${e.details}'),
       );
     }
   }
 
   /// Returns a new set of refreshed credentials.
   Future<Either<AuthFailure, Credentials>> refreshCredentials(
-      Credentials oldCredentials) async {
+    Credentials oldCredentials,
+  ) async {
     try {
       final newCredentials =
           await _remoteService.refreshCredentials(oldCredentials);
@@ -94,6 +93,18 @@ class AuthRepository {
     } on FormatException catch (e) {
       return left(
         AuthFailure.server(e.message),
+      );
+    }
+  }
+
+  /// Note that access token will NOT be revoked if there's no internet connection.
+  Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
+    try {
+      await _remoteService.signout(credentials);
+      return right(unit);
+    } on AuthorizationException catch (e) {
+      return left(
+        AuthFailure.server('${e.error}: ${e.description}'),
       );
     }
   }
