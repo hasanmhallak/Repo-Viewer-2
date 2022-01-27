@@ -66,6 +66,7 @@ class AuthRepository {
         authorizedUri.queryParameters,
       );
       await _localService.save(credentials.toJson());
+      grant.close();
       return right(unit);
     } on AuthorizationException catch (e) {
       return left(
