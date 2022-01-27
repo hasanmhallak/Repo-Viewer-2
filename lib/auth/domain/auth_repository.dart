@@ -27,7 +27,7 @@ class AuthRepository {
         if (json == null) return null;
         final credentials = Credentials.fromJson(json);
         if (credentials.isExpired && credentials.canRefresh) {
-          final refreshedCredentials = await refreshCredentials(credentials);
+          final refreshedCredentials = await _refreshCredentials(credentials);
           refreshedCredentials.fold(
             (authFailure) => null,
             (credentials) => credentials,
@@ -77,7 +77,7 @@ class AuthRepository {
   }
 
   /// Returns a new set of refreshed credentials.
-  Future<Either<AuthFailure, Credentials>> refreshCredentials(
+  Future<Either<AuthFailure, Credentials>> _refreshCredentials(
     Credentials oldCredentials,
   ) async {
     try {
@@ -105,7 +105,6 @@ class AuthRepository {
   Future<Either<AuthFailure, Unit>> signout() async {
     try {
       await _remoteService.signout(_cachedCredentials!);
-
       await _clearCredentials();
       return right(unit);
     } on AuthorizationException catch (e) {
