@@ -62,8 +62,7 @@ class AuthRepository {
         grant,
         authorizedUri.queryParameters,
       );
-      await _localService.save(credentials.toJson());
-      _cachedCredentials = credentials;
+      await _setCredentials(credentials);
       grant.close();
       return right(unit);
     } on AuthorizationException catch (e) {
@@ -84,7 +83,8 @@ class AuthRepository {
     try {
       final newCredentials =
           await _remoteService.refreshCredentials(oldCredentials);
-      _cachedCredentials = newCredentials;
+      await _setCredentials(newCredentials);
+
       return right(newCredentials);
     } on AuthorizationException catch (e) {
       return left(
@@ -94,6 +94,10 @@ class AuthRepository {
       return left(
         AuthFailure.server(e.message),
       );
+    } on PlatformException catch (e) {
+      return left(
+        AuthFailure.storage('${e.code}: ${e.details}'),
+      );
     }
   }
 
@@ -101,11 +105,27 @@ class AuthRepository {
   Future<Either<AuthFailure, Unit>> signout() async {
     try {
       await _remoteService.signout(_cachedCredentials!);
+
+      await _clearCredentials();
       return right(unit);
     } on AuthorizationException catch (e) {
       return left(
         AuthFailure.server('${e.error}: ${e.description}'),
       );
+    } on PlatformException catch (e) {
+      return left(
+        AuthFailure.storage('${e.code}: ${e.details}'),
+      );
     }
+  }
+
+  Future<void> _clearCredentials() async {
+    await _localService.delete();
+    _cachedCredentials = null;
+  }
+
+  Future<void> _setCredentials(Credentials credentials) async {
+    _cachedCredentials = credentials;
+    await _localService.save(credentials.toJson());
   }
 }
