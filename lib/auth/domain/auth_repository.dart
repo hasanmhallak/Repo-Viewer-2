@@ -19,7 +19,7 @@ class AuthRepository {
   ///
   /// Refreshes [Credentials] if needed.
   Future<Credentials?> getCredentials() async {
-    if (_cachedCredentials != null) {
+    if (_cachedCredentials != null && !_cachedCredentials!.isExpired) {
       return _cachedCredentials;
     } else {
       try {
@@ -30,10 +30,7 @@ class AuthRepository {
           final refreshedCredentials = await refreshCredentials(credentials);
           refreshedCredentials.fold(
             (authFailure) => null,
-            (credentials) {
-              _cachedCredentials = credentials;
-              return credentials;
-            },
+            (credentials) => credentials,
           );
         }
       } on PlatformException {
@@ -66,6 +63,7 @@ class AuthRepository {
         authorizedUri.queryParameters,
       );
       await _localService.save(credentials.toJson());
+      _cachedCredentials = credentials;
       grant.close();
       return right(unit);
     } on AuthorizationException catch (e) {
@@ -86,6 +84,7 @@ class AuthRepository {
     try {
       final newCredentials =
           await _remoteService.refreshCredentials(oldCredentials);
+      _cachedCredentials = newCredentials;
       return right(newCredentials);
     } on AuthorizationException catch (e) {
       return left(
@@ -99,9 +98,9 @@ class AuthRepository {
   }
 
   /// Note that access token will NOT be revoked if there's no internet connection.
-  Future<Either<AuthFailure, Unit>> signout(Credentials credentials) async {
+  Future<Either<AuthFailure, Unit>> signout() async {
     try {
-      await _remoteService.signout(credentials);
+      await _remoteService.signout(_cachedCredentials!);
       return right(unit);
     } on AuthorizationException catch (e) {
       return left(

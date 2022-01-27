@@ -16,13 +16,18 @@ class AuthNotifier extends StateNotifier<AuthState> {
         : const AuthState.unauthenticated();
   }
 
+  /// Signs the user in and updates the `state`.
   Future<void> signin(AuthHandler handler) async {
     final failureOrSuccess = await _repository.signin(
       (authUri) async => handler(authUri),
     );
     state = failureOrSuccess.fold(
-      (l) => null,
-      (r) => null,
+      (failure) => AuthState.failure(failure),
+      (success) => const AuthState.authenticated(),
     );
+  }
+
+  Future<void> signout() async {
+    await _repository.signout();
   }
 }
