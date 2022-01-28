@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../auth/presentation/sign_in_page.dart';
+import 'splash_screen.dart';
 
 class AppWidget extends StatelessWidget {
   const AppWidget();
@@ -9,7 +9,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'Repo Viewer',
       darkTheme: ThemeData.dark(),
-      home: const SignInPage(),
+      home: const SplashScreen(),
     );
   }
 }
