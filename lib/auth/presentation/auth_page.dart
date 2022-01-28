@@ -4,20 +4,20 @@ import 'package:webview_flutter/webview_flutter.dart';
 
 import '../infrastructure/auth_remote_service.dart';
 
-class AuthWebView extends StatefulWidget {
+class AuthPage extends StatefulWidget {
   final String initialUrl;
   final Function(Uri authorizedUrl) authorizedUrlHandler;
-  const AuthWebView({
+  const AuthPage({
     Key? key,
     required this.initialUrl,
     required this.authorizedUrlHandler,
   }) : super(key: key);
 
   @override
-  _AuthWebViewState createState() => _AuthWebViewState();
+  _AuthPageState createState() => _AuthPageState();
 }
 
-class _AuthWebViewState extends State<AuthWebView> {
+class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
     return WebView(

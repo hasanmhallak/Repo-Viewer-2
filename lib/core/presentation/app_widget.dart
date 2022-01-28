@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import 'routes.dart' as route;
 import 'splash_screen.dart';
 
 class AppWidget extends StatelessWidget {
@@ -9,6 +10,7 @@ class AppWidget extends StatelessWidget {
     return MaterialApp(
       title: 'Repo Viewer',
       darkTheme: ThemeData.dark(),
+      initialRoute: route.splashScreen,
       home: const SplashScreen(),
     );
   }
