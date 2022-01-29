@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'routes.dart' as route;
-import 'splash_screen.dart';
 
-class AppWidget extends StatelessWidget {
+class AppWidget extends ConsumerWidget {
   const AppWidget();
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return MaterialApp(
       title: 'Repo Viewer',
       darkTheme: ThemeData.dark(),
       initialRoute: route.splashScreen,
-      home: const SplashScreen(),
+      onGenerateRoute: route.controller,
     );
   }
 }

@@ -6,7 +6,6 @@ class SecureStorage implements AuthLocalService {
 
   String get _key => 'data';
   FlutterSecureStorage get _storage => const FlutterSecureStorage();
-
   @override
   Future<void> delete() => _storage.delete(key: _key);
 
