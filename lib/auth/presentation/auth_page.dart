@@ -20,22 +20,26 @@ class AuthPage extends StatefulWidget {
 class _AuthPageState extends State<AuthPage> {
   @override
   Widget build(BuildContext context) {
-    return WebView(
-      javascriptMode: JavascriptMode.unrestricted,
-      initialUrl: widget.initialUrl,
-      onWebViewCreated: (controller) {
-        controller.clearCache();
-        CookieManager().clearCookies();
-      },
-      navigationDelegate: (navigation) {
-        if (navigation.url
-            .startsWith(AuthRemoteService.redirectedUrl.toString())) {
-          widget.authorizedUrlHandler(Uri.parse(navigation.url));
-          return NavigationDecision.prevent;
-        } else {
-          return NavigationDecision.navigate;
-        }
-      },
+    return SafeArea(
+      child: WebView(
+        javascriptMode: JavascriptMode.unrestricted,
+        initialUrl: widget.initialUrl,
+        onWebViewCreated: (controller) {
+          controller.clearCache();
+          CookieManager().clearCookies();
+        },
+        navigationDelegate: (navigation) {
+          if (navigation.url.startsWith(
+            AuthRemoteService.redirectedUrl.toString(),
+          )) {
+            widget.authorizedUrlHandler(Uri.parse(navigation.url));
+
+            return NavigationDecision.prevent;
+          } else {
+            return NavigationDecision.navigate;
+          }
+        },
+      ),
     );
   }
 }

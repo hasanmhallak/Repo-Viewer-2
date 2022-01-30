@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:sizer/sizer.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -15,13 +16,14 @@ class SplashScreen extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             SvgPicture.asset(
-              '/gitlab_icon.svg',
-              width: 150,
-              height: 150,
+              'assets/gitlab_icon.svg',
+              width: 40.w,
+              height: 40.w,
             ),
-            const SizedBox(height: 3),
+            SizedBox(height: 3.w),
             LinearProgressIndicator(
-              color: Colors.orange[900],
+              minHeight: 1.w,
+              color: Theme.of(context).colorScheme.primary,
             )
           ],
         ),
