@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:repo_viewer/auth/infrastructure/type_defs/type_defs.dart';
 
 import '../domain/auth_repository.dart';
+import '../infrastructure/type_defs/type_defs.dart';
 import 'auth_state.dart';
 
 class AuthNotifier extends StateNotifier<AuthState> {
