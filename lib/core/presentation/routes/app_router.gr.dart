@@ -7,8 +7,6 @@
 // **************************************************************************
 // AutoRouteGenerator
 // **************************************************************************
-//
-// ignore_for_file: type=lint
 
 part of 'app_router.dart';
 
@@ -35,8 +33,10 @@ class _$AppRouter extends RootStackRouter {
               authorizedUrlHandler: args.authorizedUrlHandler));
     },
     StarredReposRoute.name: (routeData) {
+      final args = routeData.argsAs<StarredReposRouteArgs>();
       return MaterialPageX<dynamic>(
-          routeData: routeData, child: const StarredReposPage());
+          routeData: routeData,
+          child: StarredReposPage(args.signout, key: args.key));
     }
   };
 
@@ -49,30 +49,27 @@ class _$AppRouter extends RootStackRouter {
       ];
 }
 
-/// generated route for
-/// [SplashPage]
+/// generated route for [SplashPage]
 class SplashRoute extends PageRouteInfo<void> {
-  const SplashRoute() : super(SplashRoute.name, path: '/');
+  const SplashRoute() : super(name, path: '/');
 
   static const String name = 'SplashRoute';
 }
 
-/// generated route for
-/// [SignInPage]
+/// generated route for [SignInPage]
 class SignInRoute extends PageRouteInfo<void> {
-  const SignInRoute() : super(SignInRoute.name, path: '/signin');
+  const SignInRoute() : super(name, path: '/signin');
 
   static const String name = 'SignInRoute';
 }
 
-/// generated route for
-/// [AuthPage]
+/// generated route for [AuthPage]
 class AuthRoute extends PageRouteInfo<AuthRouteArgs> {
   AuthRoute(
       {Key? key,
       required String initialUrl,
       required dynamic Function(Uri) authorizedUrlHandler})
-      : super(AuthRoute.name,
+      : super(name,
             path: '/authpage',
             args: AuthRouteArgs(
                 key: key,
@@ -98,10 +95,25 @@ class AuthRouteArgs {
   }
 }
 
-/// generated route for
-/// [StarredReposPage]
-class StarredReposRoute extends PageRouteInfo<void> {
-  const StarredReposRoute() : super(StarredReposRoute.name, path: '/starred');
+/// generated route for [StarredReposPage]
+class StarredReposRoute extends PageRouteInfo<StarredReposRouteArgs> {
+  StarredReposRoute({required Future<void> Function() signout, Key? key})
+      : super(name,
+            path: '/starred',
+            args: StarredReposRouteArgs(signout: signout, key: key));
 
   static const String name = 'StarredReposRoute';
+}
+
+class StarredReposRouteArgs {
+  const StarredReposRouteArgs({required this.signout, this.key});
+
+  final Future<void> Function() signout;
+
+  final Key? key;
+
+  @override
+  String toString() {
+    return 'StarredReposRouteArgs{signout: $signout, key: $key}';
+  }
 }

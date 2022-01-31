@@ -1,10 +1,9 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:repo_viewer/auth/application/auth_state.dart';
-import 'package:repo_viewer/auth/providers/providers.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../auth/application/auth_state.dart';
+import '../../auth/providers/providers.dart';
 import 'routes/app_router.dart';
 
 class AppWidget extends ConsumerWidget {
@@ -19,7 +18,10 @@ class AppWidget extends ConsumerWidget {
         orElse: () {},
         authenticated: () {
           _appRouter.pushAndPopUntil(
-            const StarredReposRoute(),
+            StarredReposRoute(
+              signout: ref.read(authNotifier.notifier).signout() as Future<void>
+                  Function(),
+            ),
             predicate: (route) => false,
           );
         },
@@ -35,9 +37,9 @@ class AppWidget extends ConsumerWidget {
     return Sizer(
       builder: (context, orientation, deviceType) {
         return MaterialApp.router(
-          useInheritedMediaQuery: true,
-          locale: DevicePreview.locale(context),
-          builder: DevicePreview.appBuilder,
+          // useInheritedMediaQuery: true,
+          // locale: DevicePreview.locale(context),
+          // builder: DevicePreview.appBuilder,
           title: 'Repo Viewer',
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,

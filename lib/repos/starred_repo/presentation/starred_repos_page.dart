@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../../../auth/providers/providers.dart';
 
 class StarredReposPage extends ConsumerWidget {
-  const StarredReposPage({Key? key}) : super(key: key);
+  final Future<void> Function() signout;
+  const StarredReposPage(this.signout, {Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -11,10 +11,8 @@ class StarredReposPage extends ConsumerWidget {
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
       body: Center(
         child: ElevatedButton(
+          onPressed: () => signout(),
           child: const Text('Signout'),
-          onPressed: () {
-            ref.read(authNotifier.notifier).signout();
-          },
         ),
       ),
     );

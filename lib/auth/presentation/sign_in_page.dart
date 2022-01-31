@@ -1,12 +1,13 @@
 import 'dart:async';
 
+import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:sizer/sizer.dart';
 
+import '../../core/presentation/routes/app_router.dart';
 import '../providers/providers.dart';
-import 'auth_page.dart';
 
 class SignInPage extends ConsumerWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -41,16 +42,15 @@ class SignInPage extends ConsumerWidget {
                 ref.watch(authNotifier.notifier).signin((authUri) {
                   final uri = Completer<Uri>();
 
-                  Navigator.of(context).push(
-                    MaterialPageRoute(
-                      builder: (context) => AuthPage(
-                        initialUrl: authUri.toString(),
-                        authorizedUrlHandler: (Uri authorizedUrl) {
-                          uri.complete(authorizedUrl);
-                        },
-                      ),
+                  context.router.push(
+                    AuthRoute(
+                      initialUrl: authUri.toString(),
+                      authorizedUrlHandler: (Uri authorizedUrl) {
+                        uri.complete(authorizedUrl);
+                      },
                     ),
                   );
+
                   return uri.future;
                 });
               },

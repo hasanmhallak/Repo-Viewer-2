@@ -1,9 +1,4 @@
-import 'credentials_storage/secure_storage.dart';
-
 abstract class AuthLocalService {
-  // Forwarding constructor.
-  const factory AuthLocalService() = SecureStorage;
-
   /// Encrypts and saves data in local storage.
   ///
   /// Can throw [PlatformException].

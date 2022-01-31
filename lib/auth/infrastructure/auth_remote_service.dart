@@ -10,9 +10,13 @@ class AuthRemoteService {
 
   final _authorizationEndpoint =
       Uri.parse('https://gitlab.com/oauth/authorize');
+
   final _tokenEndpoint = Uri.parse('https://gitlab.com/oauth/token');
+
   static final redirectedUrl = Uri.parse('https://localhost:3000/callback');
+
   final _revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
+
   final _scopes = ['read_user', 'read_repository'];
 
   /// Creates a new grant which uses HTTP Basic authentication as defined in RFC 2617.

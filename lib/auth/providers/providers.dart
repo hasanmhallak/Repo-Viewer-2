@@ -4,12 +4,12 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../application/auth_notifier.dart';
 import '../application/auth_state.dart';
 import '../domain/auth_repository.dart';
-import '../infrastructure/auth_local_service.dart';
 import '../infrastructure/auth_remote_service.dart';
+import '../infrastructure/credentials_storage/secure_storage.dart';
 
 final authRepository = Provider<AuthRepository>((ref) {
   final _dio = Dio();
-  const _localService = AuthLocalService();
+  const _localService = SecureStorage();
   final _remoteService = AuthRemoteService(_dio);
   return AuthRepository(_localService, _remoteService);
 });
