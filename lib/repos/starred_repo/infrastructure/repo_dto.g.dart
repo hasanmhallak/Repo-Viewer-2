@@ -10,7 +10,7 @@ _$_RepoDTO _$$_RepoDTOFromJson(Map<String, dynamic> json) => _$_RepoDTO(
       order: json['order'] as int,
       id: json['id'] as int,
       name: json['name'] as String,
-      description: json['description'] as String,
+      description: _descriptionFromJson(json['description']),
       starCount: json['star_count'] as int,
       avatarUrl: json['avatar_url'] as String,
     );

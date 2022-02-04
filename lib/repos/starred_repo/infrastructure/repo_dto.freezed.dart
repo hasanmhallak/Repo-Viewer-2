@@ -25,7 +25,7 @@ class _$RepoDTOTearOff {
       {required int order,
       required int id,
       required String name,
-      required String description,
+      @JsonKey(fromJson: _descriptionFromJson) required String description,
       @JsonKey(name: 'star_count') required int starCount,
       @JsonKey(name: 'avatar_url') required String avatarUrl}) {
     return _RepoDTO(
@@ -50,7 +50,9 @@ const $RepoDTO = _$RepoDTOTearOff();
 mixin _$RepoDTO {
   int get order => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
-  String get name => throw _privateConstructorUsedError;
+  String get name =>
+      throw _privateConstructorUsedError; // Don't want to have `null` in description.
+  @JsonKey(fromJson: _descriptionFromJson)
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'star_count')
   int get starCount => throw _privateConstructorUsedError;
@@ -70,7 +72,7 @@ abstract class $RepoDTOCopyWith<$Res> {
       {int order,
       int id,
       String name,
-      String description,
+      @JsonKey(fromJson: _descriptionFromJson) String description,
       @JsonKey(name: 'star_count') int starCount,
       @JsonKey(name: 'avatar_url') String avatarUrl});
 }
@@ -130,7 +132,7 @@ abstract class _$RepoDTOCopyWith<$Res> implements $RepoDTOCopyWith<$Res> {
       {int order,
       int id,
       String name,
-      String description,
+      @JsonKey(fromJson: _descriptionFromJson) String description,
       @JsonKey(name: 'star_count') int starCount,
       @JsonKey(name: 'avatar_url') String avatarUrl});
 }
@@ -189,7 +191,7 @@ class _$_RepoDTO extends _RepoDTO {
       {required this.order,
       required this.id,
       required this.name,
-      required this.description,
+      @JsonKey(fromJson: _descriptionFromJson) required this.description,
       @JsonKey(name: 'star_count') required this.starCount,
       @JsonKey(name: 'avatar_url') required this.avatarUrl})
       : super._();
@@ -203,7 +205,8 @@ class _$_RepoDTO extends _RepoDTO {
   final int id;
   @override
   final String name;
-  @override
+  @override // Don't want to have `null` in description.
+  @JsonKey(fromJson: _descriptionFromJson)
   final String description;
   @override
   @JsonKey(name: 'star_count')
@@ -257,7 +260,7 @@ abstract class _RepoDTO extends RepoDTO {
       {required int order,
       required int id,
       required String name,
-      required String description,
+      @JsonKey(fromJson: _descriptionFromJson) required String description,
       @JsonKey(name: 'star_count') required int starCount,
       @JsonKey(name: 'avatar_url') required String avatarUrl}) = _$_RepoDTO;
   const _RepoDTO._() : super._();
@@ -270,7 +273,8 @@ abstract class _RepoDTO extends RepoDTO {
   int get id;
   @override
   String get name;
-  @override
+  @override // Don't want to have `null` in description.
+  @JsonKey(fromJson: _descriptionFromJson)
   String get description;
   @override
   @JsonKey(name: 'star_count')

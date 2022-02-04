@@ -6,6 +6,9 @@ import '../../auth/application/auth_state.dart';
 import '../../auth/providers/providers.dart';
 import 'routes/app_router.dart';
 
+// [FutureProvider] are used when some data need to be async.
+final initializationProvider = FutureProvider((ref) async {});
+
 class AppWidget extends ConsumerWidget {
   final _appRouter = AppRouter();
 
