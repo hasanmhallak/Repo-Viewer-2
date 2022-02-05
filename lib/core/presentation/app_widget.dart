@@ -4,32 +4,38 @@ import 'package:sizer/sizer.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../../auth/providers/providers.dart';
+import '../../repos/core/providers/provider.dart';
 import 'routes/app_router.dart';
 
 class AppWidget extends ConsumerWidget {
   final _appRouter = AppRouter();
 
-  @override
-  Widget build(BuildContext context, WidgetRef ref) {
-    ref.read(authNotifier.notifier).checkAndUpdateAuthState();
+  void _authenticated(WidgetRef provider) {
+    _appRouter.pushAndPopUntil(
+      StarredReposRoute(
+        signout: provider.read(authNotifier.notifier).signout() as Future<void>
+            Function(),
+      ),
+      predicate: (route) => false,
+    );
+  }
 
-    ref.listen<AuthState>(authNotifier, (previous, next) {
+  void _unauthenticated() {
+    _appRouter.pushAndPopUntil(
+      const SignInRoute(),
+      predicate: (route) => false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context, WidgetRef provider) {
+    provider.listen(initializationProvider, (previous, next) {});
+    provider.read(authNotifier.notifier).checkAndUpdateAuthState();
+    provider.listen<AuthState>(authNotifier, (previous, next) {
       next.maybeWhen(
         orElse: () {},
-        authenticated: () {
-          _appRouter.pushAndPopUntil(
-            StarredReposRoute(
-              signout: ref.read(authNotifier.notifier).signout,
-            ),
-            predicate: (route) => false,
-          );
-        },
-        unauthenticated: () {
-          _appRouter.pushAndPopUntil(
-            const SignInRoute(),
-            predicate: (route) => false,
-          );
-        },
+        authenticated: () => _authenticated(provider),
+        unauthenticated: () => _unauthenticated(),
       );
     });
 
