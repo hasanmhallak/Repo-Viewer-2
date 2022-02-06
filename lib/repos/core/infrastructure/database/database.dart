@@ -31,4 +31,7 @@ abstract class DataBase {
     int? offset,
     int? limit,
   });
+
+  /// Deletes the record.
+  Future<void> deleteRecord(dynamic key);
 }

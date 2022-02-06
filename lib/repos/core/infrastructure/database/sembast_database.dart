@@ -9,9 +9,9 @@ enum StoreType { intMap, stringMap }
 
 class SembastDatabase {
   late Database _instance;
-  Database get instance => _instance;
   bool _hasBeenInitialized = false;
 
+  /// initialize database.
   Future<void> init() async {
     if (_hasBeenInitialized) {
       return;
@@ -21,6 +21,11 @@ class SembastDatabase {
       _instance = await databaseFactoryIo.openDatabase(dbPath);
       _hasBeenInitialized = true;
     }
+  }
+
+  /// Closes database.
+  Future<void> closeDb() {
+    return _instance.close();
   }
 }
 
@@ -42,7 +47,7 @@ class SembastDbStore implements DataBase {
     List<dynamic> keys,
     List<Map<String, dynamic>> values,
   ) async {
-    await _store.records(keys).put(_db.instance, values);
+    await _store.records(keys).put(_db._instance, values);
   }
 
   @override
@@ -77,5 +82,10 @@ class SembastDbStore implements DataBase {
       ),
     );
     return records.map((e) => e.value as Map<String, dynamic>).toList();
+  }
+
+  @override
+  Future<void> deleteRecord(dynamic key) async {
+    await _store.record(key).delete(_db._instance);
   }
 }
