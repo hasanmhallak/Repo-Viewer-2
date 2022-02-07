@@ -1,5 +1,5 @@
 import 'package:repo_viewer/repos/core/infrastructure/database/database.dart';
-import 'package:repo_viewer/repos/core/infrastructure/header_dto.dart';
+import 'package:repo_viewer/repos/core/infrastructure/dto/header_dto.dart';
 
 class HeadersLocalService {
   final DataBase _db;

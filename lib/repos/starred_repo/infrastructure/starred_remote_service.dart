@@ -34,6 +34,8 @@ class StarredRemoteService {
 
       if (response.statusCode == 200) {
         // success.
+        // response.headers.map
+        // await _localService.saveHeaders()
       } else if (response.statusCode == 304) {
         // Not Modified.
       }

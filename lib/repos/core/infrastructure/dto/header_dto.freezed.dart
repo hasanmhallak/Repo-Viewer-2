@@ -22,9 +22,12 @@ class _$HeaderDTOTearOff {
   const _$HeaderDTOTearOff();
 
   _HeaderDTO call(
-      {required String url,
-      @JsonKey(defaultValue: '') required String etag,
-      @JsonKey(defaultValue: 0) required int nextPage}) {
+      {@JsonKey(defaultValue: '', fromJson: _stringFromJson)
+          required String url,
+      @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
+          required String etag,
+      @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
+          required int nextPage}) {
     return _HeaderDTO(
       url: url,
       etag: etag,
@@ -42,10 +45,11 @@ const $HeaderDTO = _$HeaderDTOTearOff();
 
 /// @nodoc
 mixin _$HeaderDTO {
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson)
   String get url => throw _privateConstructorUsedError;
-  @JsonKey(defaultValue: '')
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
   String get etag => throw _privateConstructorUsedError;
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
   int get nextPage => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -59,9 +63,12 @@ abstract class $HeaderDTOCopyWith<$Res> {
   factory $HeaderDTOCopyWith(HeaderDTO value, $Res Function(HeaderDTO) then) =
       _$HeaderDTOCopyWithImpl<$Res>;
   $Res call(
-      {String url,
-      @JsonKey(defaultValue: '') String etag,
-      @JsonKey(defaultValue: 0) int nextPage});
+      {@JsonKey(defaultValue: '', fromJson: _stringFromJson)
+          String url,
+      @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
+          String etag,
+      @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
+          int nextPage});
 }
 
 /// @nodoc
@@ -102,9 +109,12 @@ abstract class _$HeaderDTOCopyWith<$Res> implements $HeaderDTOCopyWith<$Res> {
       __$HeaderDTOCopyWithImpl<$Res>;
   @override
   $Res call(
-      {String url,
-      @JsonKey(defaultValue: '') String etag,
-      @JsonKey(defaultValue: 0) int nextPage});
+      {@JsonKey(defaultValue: '', fromJson: _stringFromJson)
+          String url,
+      @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
+          String etag,
+      @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
+          int nextPage});
 }
 
 /// @nodoc
@@ -143,21 +153,25 @@ class __$HeaderDTOCopyWithImpl<$Res> extends _$HeaderDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_HeaderDTO extends _HeaderDTO {
   const _$_HeaderDTO(
-      {required this.url,
-      @JsonKey(defaultValue: '') required this.etag,
-      @JsonKey(defaultValue: 0) required this.nextPage})
+      {@JsonKey(defaultValue: '', fromJson: _stringFromJson)
+          required this.url,
+      @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
+          required this.etag,
+      @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
+          required this.nextPage})
       : super._();
 
   factory _$_HeaderDTO.fromJson(Map<String, dynamic> json) =>
       _$$_HeaderDTOFromJson(json);
 
   @override
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson)
   final String url;
   @override
-  @JsonKey(defaultValue: '')
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
   final String etag;
   @override
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
   final int nextPage;
 
   @override
@@ -195,21 +209,25 @@ class _$_HeaderDTO extends _HeaderDTO {
 
 abstract class _HeaderDTO extends HeaderDTO {
   const factory _HeaderDTO(
-      {required String url,
-      @JsonKey(defaultValue: '') required String etag,
-      @JsonKey(defaultValue: 0) required int nextPage}) = _$_HeaderDTO;
+      {@JsonKey(defaultValue: '', fromJson: _stringFromJson)
+          required String url,
+      @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
+          required String etag,
+      @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
+          required int nextPage}) = _$_HeaderDTO;
   const _HeaderDTO._() : super._();
 
   factory _HeaderDTO.fromJson(Map<String, dynamic> json) =
       _$_HeaderDTO.fromJson;
 
   @override
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson)
   String get url;
   @override
-  @JsonKey(defaultValue: '')
+  @JsonKey(defaultValue: '', fromJson: _stringFromJson, name: 'Etag')
   String get etag;
   @override
-  @JsonKey(defaultValue: 0)
+  @JsonKey(defaultValue: 0, fromJson: _nextPageFromJson, name: 'X-Next-Page')
   int get nextPage;
   @override
   @JsonKey(ignore: true)
