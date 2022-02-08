@@ -20,7 +20,6 @@ class StarredRemoteService {
     final requestUrl =
         Uri.https('gitlab.com/api/v4', '/users/user_name/starred_projects', {
       'page': page.toString(),
-      // TODO: implements per_page constant.
       'per_page': 30,
       'simple': true,
     });
