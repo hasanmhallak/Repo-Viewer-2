@@ -5,7 +5,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'header_dto.freezed.dart';
 part 'header_dto.g.dart';
 
-//! No need to check for null in the headers because [Dio] will put an
+//! No need to check for null in headers because [Dio] will put an
 //! empty [String] in the list Like this:
 //! [""];
 //! But the headers key may be not exist so we must provide a default value.
@@ -45,7 +45,7 @@ class HeaderDTO with _$HeaderDTO {
   factory HeaderDTO.fromJson(Map<String, dynamic> json) =>
       _$HeaderDTOFromJson(json);
 
-  HeaderDTO parse(String url, Map<String, List<String>> headers) {
+  factory HeaderDTO.parse(String url, Map<String, List<String>> headers) {
     // checkimg if the key is not exist.
     final nextPageAsString = headers['Etag']?[0] ?? '';
     final nextPageAsIntOrNull = int.tryParse(nextPageAsString);
