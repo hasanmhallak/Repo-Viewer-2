@@ -1,11 +1,12 @@
 import 'package:dio/dio.dart';
-import 'package:repo_viewer/core/infrastructure/extinstions/dio_no_internet.dart';
-import 'package:repo_viewer/repos/core/infrastructure/dto/header_dto.dart';
-import 'package:repo_viewer/repos/core/infrastructure/helper_classes/remote_response.dart';
-import 'package:repo_viewer/repos/core/infrastructure/helper_classes/rest_api_exception.dart';
-import 'package:repo_viewer/repos/starred_repo/infrastructure/repo_dto.dart';
 
+import '../../../core/infrastructure/extinstions/dio_no_internet.dart';
+import '../../core/infrastructure/dto/header_dto.dart';
 import '../../core/infrastructure/headers_local_service.dart';
+import '../../core/infrastructure/helper_classes/remote_response.dart';
+import '../../core/infrastructure/helper_classes/rest_api_exception.dart';
+import '../../core/infrastructure/pagination_config.dart';
+import 'repo_dto.dart';
 
 class StarredRemoteService {
   final Dio _dio;
@@ -16,11 +17,11 @@ class StarredRemoteService {
   );
 
   Future<RemoteResponse<List<RepoDTO>>> getPage(int page) async {
-    // TODO: this is a business logic related. move it to domain.
+    // TODO: this is a api logic related. move it to domain.
     final requestUrl =
         Uri.https('gitlab.com/api/v4', '/users/user_name/starred_projects', {
-      'page': page.toString(),
-      'per_page': 30,
+      'page': page,
+      'per_page': PaginationConfig.itemsPerPage,
       'simple': true,
     });
 
