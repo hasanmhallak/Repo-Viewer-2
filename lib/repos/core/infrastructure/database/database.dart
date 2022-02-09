@@ -1,8 +1,13 @@
 import 'sembast_database.dart';
 
 abstract class DataBase {
-  factory DataBase(StoreType type, String name, SembastDatabase db) =
-      SembastDbStore;
+  /// Returns [DataBase] instance which stores data with key as `int` and value as Map.
+  factory DataBase.integerStore(SembastDatabase db, String name) =
+      SembastDbStore.integerStore;
+
+  /// Returns [DataBase] instance which stores data with key as `String` and value as Map.
+  factory DataBase.stringStore(SembastDatabase db, String name) =
+      SembastDbStore.stringStore;
 
   /// Save multiple records, creating the one needed.
   ///
@@ -31,6 +36,9 @@ abstract class DataBase {
     int? offset,
     int? limit,
   });
+
+  /// Deletes the records.
+  Future<void> deleteRecords(List<dynamic> keys);
 
   /// Deletes the record.
   Future<void> deleteRecord(dynamic key);

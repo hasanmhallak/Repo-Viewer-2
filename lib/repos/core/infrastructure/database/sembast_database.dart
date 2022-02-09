@@ -5,8 +5,6 @@ import 'package:sembast/sembast_io.dart';
 
 import 'database.dart';
 
-enum StoreType { intMap, stringMap }
-
 class SembastDatabase {
   late Database _instance;
   bool _hasBeenInitialized = false;
@@ -32,14 +30,12 @@ class SembastDatabase {
 class SembastDbStore implements DataBase {
   final SembastDatabase _db;
   late StoreRef _store;
-  SembastDbStore(StoreType type, String name, this._db) {
-    switch (type) {
-      case StoreType.intMap:
-        _store = intMapStoreFactory.store(name);
-        break;
-      case StoreType.stringMap:
-        _store = stringMapStoreFactory.store(name);
-    }
+  SembastDbStore.integerStore(this._db, String name) {
+    _store = intMapStoreFactory.store(name);
+  }
+
+  SembastDbStore.stringStore(this._db, String name) {
+    _store = stringMapStoreFactory.store(name);
   }
 
   @override
@@ -82,6 +78,11 @@ class SembastDbStore implements DataBase {
       ),
     );
     return records.map((e) => e.value as Map<String, dynamic>).toList();
+  }
+
+  @override
+  Future<void> deleteRecords(List<dynamic> keys) async {
+    await _store.records(keys).delete(_db._instance);
   }
 
   @override
