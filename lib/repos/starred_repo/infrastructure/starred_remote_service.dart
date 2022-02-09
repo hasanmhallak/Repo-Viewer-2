@@ -16,14 +16,27 @@ class StarredRemoteService {
     this._localService,
   );
 
+  /// Performs [GET] request to get a page.
+  ///
+  /// Comunicates with [HeadersLocalService] to get and save [Headers].
+  ///
+  /// Returns:
+  ///   - [RemoteResponse.noConnection] if there's no internet connection.
+  ///   - [RemoteResponse.notModified] if the page information is not modified.
+  ///   - [RemoteResponse.withData] if the request was successful.
+  ///
+  /// May throw [RestApiException].
   Future<RemoteResponse<List<RepoDTO>>> getPage(int page) async {
-    // TODO: this is a api logic related. move it to domain.
-    final requestUrl =
-        Uri.https('gitlab.com/api/v4', '/users/user_name/starred_projects', {
-      'page': page,
-      'per_page': PaginationConfig.itemsPerPage,
-      'simple': true,
-    });
+    // TODO: this is a api logic related. move it to api.
+    final requestUrl = Uri.https(
+      'gitlab.com/api/v4',
+      '/users/user_name/starred_projects',
+      {
+        'page': page,
+        'per_page': PaginationConfig.itemsPerPage,
+        'simple': true,
+      },
+    );
 
     final previousHeader =
         await _localService.getHeaders(requestUrl.toString());
