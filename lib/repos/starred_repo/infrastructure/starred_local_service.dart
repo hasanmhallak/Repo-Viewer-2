@@ -1,19 +1,17 @@
-// ignore: depend_on_referenced_packages, implementation_imports
-import 'package:collection/src/list_extensions.dart';
-
 import '../../core/infrastructure/database/database.dart';
 import '../../core/infrastructure/pagination_config.dart';
 import 'repo_dto.dart';
 
 class StarredLocalService {
   final DataBase _db;
+  final PaginationConfig _pageConfig;
 
-  StarredLocalService(this._db);
+  StarredLocalService(this._db, this._pageConfig);
 
   /// Inserts and Updates local storage.
   Future<void> upsertPage(List<RepoDTO> dtos, int page) async {
     // Preparing data.
-    final paginatedKeys = _getPaginatedKeys(dtos, page);
+    final paginatedKeys = _pageConfig.getPaginatedKeys(dtos, page);
     final records = dtos.map((e) => e.toJson()).toList();
 
     await _db.saveRecords(paginatedKeys, records);
@@ -21,25 +19,34 @@ class StarredLocalService {
 
   /// Gets a page from local storage.
   Future<List<RepoDTO>> getPage(int page) async {
-    final dataBasePage = page - 1;
+    final databasePage = _pageConfig.getDatabasePage(page);
     final records = await _db.findRecords(
       limit: PaginationConfig.itemsPerPage,
-      offset: dataBasePage * PaginationConfig.itemsPerPage,
+      offset: databasePage * PaginationConfig.itemsPerPage,
     );
     return records.map((e) => RepoDTO.fromJson(e)).toList();
   }
-}
 
-List<int> _getPaginatedKeys(List<RepoDTO> dtos, int page) {
-  final dataBasePage = page - 1;
+  /// Deletes repo from local storage.
+  ///
+  /// Updates database.
+  Future<void> deleteRepo(int repoIndex) async {
+    // get the database page of the repo which we want to delete.
+    final databasePage = _pageConfig.getRepoDatabasePage(repoIndex);
 
-  final paginatedKeys = dtos.mapIndexed(
-    (int index, _) {
-      //    page 1     ||      page 2     ||      page 3    ||
-      //   0 + 3 * 0   ||     0 + 3 * 1   ||     0 + 3 * 2  ||
-      //   0, 1, 2     ||     3, 4, 5     ||     6, 7, 8    ||
-      return index + PaginationConfig.itemsPerPage * dataBasePage;
-    },
-  ).toList();
-  return paginatedKeys;
+    // get all repos which we want to update its keys when we delete the repo.
+    // the repo we want to delete is at index 0.
+    final records = await _db.findRecords(offset: repoIndex);
+    // get the keys.
+    final keysToUpdate = _pageConfig.getPaginatedKeys(records, databasePage);
+
+    // deletes all the repos from database.
+    await _db.deleteRecords(keysToUpdate);
+
+    // delete the repo from the records list.
+    records.removeAt(0);
+
+    // update database.
+    await _db.saveRecords(keysToUpdate, records);
+  }
 }
