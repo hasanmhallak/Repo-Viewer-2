@@ -11,11 +11,9 @@ import 'repo_dto.dart';
 class StarredRemoteService {
   final Dio _dio;
   final HeadersLocalService _localService;
-  final PaginationConfig _pageConfig;
   StarredRemoteService(
     this._dio,
     this._localService,
-    this._pageConfig,
   );
 
   /// Performs [GET] request to get a page.

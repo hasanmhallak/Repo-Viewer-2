@@ -3,8 +3,13 @@ import 'package:flutter/material.dart';
 
 import '../../../auth/presentation/auth_page.dart';
 import '../../../auth/presentation/sign_in_page.dart';
+<<<<<<< HEAD
 import '../../../repos/starred_repo/presentation/starred_repos_page.dart';
 import '../splash_page.dart';
+=======
+import '../../../auth/presentation/splash_page.dart';
+import '../../../repos/starred_repo/presentation/starred_repos_page.dart';
+>>>>>>> 6d7f644 (Starred working on the repository)
 
 part 'app_router.gr.dart';
 
