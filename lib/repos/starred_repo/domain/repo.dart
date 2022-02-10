@@ -7,6 +7,7 @@ part 'repo.freezed.dart';
 class Repo with _$Repo {
   const Repo._();
   const factory Repo({
+    required int index,
     required int id,
     required String name,
     required String description,

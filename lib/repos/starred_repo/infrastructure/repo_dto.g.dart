@@ -7,6 +7,7 @@ part of 'repo_dto.dart';
 // **************************************************************************
 
 _$_RepoDTO _$$_RepoDTOFromJson(Map<String, dynamic> json) => _$_RepoDTO(
+      index: json['index'] as int,
       id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
@@ -16,6 +17,7 @@ _$_RepoDTO _$$_RepoDTOFromJson(Map<String, dynamic> json) => _$_RepoDTO(
 
 Map<String, dynamic> _$$_RepoDTOToJson(_$_RepoDTO instance) =>
     <String, dynamic>{
+      'index': instance.index,
       'id': instance.id,
       'name': instance.name,
       'description': instance.description,

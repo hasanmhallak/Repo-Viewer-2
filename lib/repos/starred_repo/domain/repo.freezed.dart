@@ -18,12 +18,14 @@ class _$RepoTearOff {
   const _$RepoTearOff();
 
   _Repo call(
-      {required int id,
+      {required int index,
+      required int id,
       required String name,
       required String description,
       required int starCount,
       required String avatarUrl}) {
     return _Repo(
+      index: index,
       id: id,
       name: name,
       description: description,
@@ -38,6 +40,7 @@ const $Repo = _$RepoTearOff();
 
 /// @nodoc
 mixin _$Repo {
+  int get index => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -53,7 +56,8 @@ abstract class $RepoCopyWith<$Res> {
   factory $RepoCopyWith(Repo value, $Res Function(Repo) then) =
       _$RepoCopyWithImpl<$Res>;
   $Res call(
-      {int id,
+      {int index,
+      int id,
       String name,
       String description,
       int starCount,
@@ -70,6 +74,7 @@ class _$RepoCopyWithImpl<$Res> implements $RepoCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? index = freezed,
     Object? id = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -77,6 +82,10 @@ class _$RepoCopyWithImpl<$Res> implements $RepoCopyWith<$Res> {
     Object? avatarUrl = freezed,
   }) {
     return _then(_value.copyWith(
+      index: index == freezed
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -107,7 +116,8 @@ abstract class _$RepoCopyWith<$Res> implements $RepoCopyWith<$Res> {
       __$RepoCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id,
+      {int index,
+      int id,
       String name,
       String description,
       int starCount,
@@ -125,6 +135,7 @@ class __$RepoCopyWithImpl<$Res> extends _$RepoCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? index = freezed,
     Object? id = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -132,6 +143,10 @@ class __$RepoCopyWithImpl<$Res> extends _$RepoCopyWithImpl<$Res>
     Object? avatarUrl = freezed,
   }) {
     return _then(_Repo(
+      index: index == freezed
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -160,13 +175,16 @@ class __$RepoCopyWithImpl<$Res> extends _$RepoCopyWithImpl<$Res>
 
 class _$_Repo extends _Repo {
   const _$_Repo(
-      {required this.id,
+      {required this.index,
+      required this.id,
       required this.name,
       required this.description,
       required this.starCount,
       required this.avatarUrl})
       : super._();
 
+  @override
+  final int index;
   @override
   final int id;
   @override
@@ -180,7 +198,7 @@ class _$_Repo extends _Repo {
 
   @override
   String toString() {
-    return 'Repo(id: $id, name: $name, description: $description, starCount: $starCount, avatarUrl: $avatarUrl)';
+    return 'Repo(index: $index, id: $id, name: $name, description: $description, starCount: $starCount, avatarUrl: $avatarUrl)';
   }
 
   @override
@@ -188,6 +206,7 @@ class _$_Repo extends _Repo {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Repo &&
+            const DeepCollectionEquality().equals(other.index, index) &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
@@ -199,6 +218,7 @@ class _$_Repo extends _Repo {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(index),
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(description),
@@ -213,13 +233,16 @@ class _$_Repo extends _Repo {
 
 abstract class _Repo extends Repo {
   const factory _Repo(
-      {required int id,
+      {required int index,
+      required int id,
       required String name,
       required String description,
       required int starCount,
       required String avatarUrl}) = _$_Repo;
   const _Repo._() : super._();
 
+  @override
+  int get index;
   @override
   int get id;
   @override

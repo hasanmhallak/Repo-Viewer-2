@@ -1,6 +1,5 @@
 // ignore_for_file: depend_on_referenced_packages
 // ignore_for_file: invalid_annotation_target
-
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -13,6 +12,7 @@ part 'repo_dto.g.dart';
 class RepoDTO with _$RepoDTO {
   const RepoDTO._();
   const factory RepoDTO({
+    required int index,
     required int id,
     required String name,
     required String description,
@@ -25,6 +25,7 @@ class RepoDTO with _$RepoDTO {
 
   factory RepoDTO.fromDomain(Repo _) {
     return RepoDTO(
+      index: _.index,
       id: _.id,
       name: _.name,
       description: _.description,
@@ -35,6 +36,7 @@ class RepoDTO with _$RepoDTO {
 
   Repo toDomain() {
     return Repo(
+      index: index,
       id: id,
       name: name,
       description: description,

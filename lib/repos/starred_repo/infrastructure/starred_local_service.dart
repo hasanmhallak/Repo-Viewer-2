@@ -4,22 +4,22 @@ import 'repo_dto.dart';
 
 class StarredLocalService {
   final DataBase _db;
-  final PaginationConfig _pageConfig;
 
-  StarredLocalService(this._db, this._pageConfig);
+  StarredLocalService(this._db);
 
   /// Inserts and Updates local storage.
-  Future<void> upsertPage(List<RepoDTO> dtos, int page) async {
+  Future<void> upsertPage(List<RepoDTO> dtos) async {
     // Preparing data.
-    final paginatedKeys = _pageConfig.getPaginatedKeys(dtos, page);
+    final databaseKeys = dtos.map((dto) => dto.index).toList();
     final records = dtos.map((e) => e.toJson()).toList();
 
-    await _db.saveRecords(paginatedKeys, records);
+    await _db.saveRecords(databaseKeys, records);
   }
 
   /// Gets a page from local storage.
   Future<List<RepoDTO>> getPage(int page) async {
-    final databasePage = _pageConfig.getDatabasePage(page);
+    final databasePage =
+        PaginationConfig.calculateDatabasePageFromServerPage(page);
     final records = await _db.findRecords(
       limit: PaginationConfig.itemsPerPage,
       offset: databasePage * PaginationConfig.itemsPerPage,
@@ -30,16 +30,14 @@ class StarredLocalService {
   /// Deletes repo from local storage.
   ///
   /// Updates database.
-  Future<void> deleteRepo(int repoIndex) async {
-    // get the database page of the repo which we want to delete.
-    final databasePage = _pageConfig.getRepoDatabasePage(repoIndex);
+  Future<void> deleteRepo(RepoDTO dto) async {
+    final databaseIndex = dto.index;
 
     // get all repos which we want to update its keys when we delete the repo.
     // the repo we want to delete is at index 0.
-    final records = await _db.findRecords(offset: repoIndex);
+    final records = await _db.findRecords(offset: databaseIndex);
     // get the keys.
-    final keysToUpdate = _pageConfig.getPaginatedKeys(records, databasePage);
-
+    final keysToUpdate = records.map((e) => RepoDTO.fromJson(e).index).toList();
     // deletes all the repos from database.
     await _db.deleteRecords(keysToUpdate);
 

@@ -22,12 +22,14 @@ class _$RepoDTOTearOff {
   const _$RepoDTOTearOff();
 
   _RepoDTO call(
-      {required int id,
+      {required int index,
+      required int id,
       required String name,
       required String description,
       @JsonKey(name: 'star_count') required int starCount,
       @JsonKey(name: 'avatar_url') required String avatarUrl}) {
     return _RepoDTO(
+      index: index,
       id: id,
       name: name,
       description: description,
@@ -46,6 +48,7 @@ const $RepoDTO = _$RepoDTOTearOff();
 
 /// @nodoc
 mixin _$RepoDTO {
+  int get index => throw _privateConstructorUsedError;
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
@@ -64,7 +67,8 @@ abstract class $RepoDTOCopyWith<$Res> {
   factory $RepoDTOCopyWith(RepoDTO value, $Res Function(RepoDTO) then) =
       _$RepoDTOCopyWithImpl<$Res>;
   $Res call(
-      {int id,
+      {int index,
+      int id,
       String name,
       String description,
       @JsonKey(name: 'star_count') int starCount,
@@ -81,6 +85,7 @@ class _$RepoDTOCopyWithImpl<$Res> implements $RepoDTOCopyWith<$Res> {
 
   @override
   $Res call({
+    Object? index = freezed,
     Object? id = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -88,6 +93,10 @@ class _$RepoDTOCopyWithImpl<$Res> implements $RepoDTOCopyWith<$Res> {
     Object? avatarUrl = freezed,
   }) {
     return _then(_value.copyWith(
+      index: index == freezed
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -118,7 +127,8 @@ abstract class _$RepoDTOCopyWith<$Res> implements $RepoDTOCopyWith<$Res> {
       __$RepoDTOCopyWithImpl<$Res>;
   @override
   $Res call(
-      {int id,
+      {int index,
+      int id,
       String name,
       String description,
       @JsonKey(name: 'star_count') int starCount,
@@ -136,6 +146,7 @@ class __$RepoDTOCopyWithImpl<$Res> extends _$RepoDTOCopyWithImpl<$Res>
 
   @override
   $Res call({
+    Object? index = freezed,
     Object? id = freezed,
     Object? name = freezed,
     Object? description = freezed,
@@ -143,6 +154,10 @@ class __$RepoDTOCopyWithImpl<$Res> extends _$RepoDTOCopyWithImpl<$Res>
     Object? avatarUrl = freezed,
   }) {
     return _then(_RepoDTO(
+      index: index == freezed
+          ? _value.index
+          : index // ignore: cast_nullable_to_non_nullable
+              as int,
       id: id == freezed
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -171,7 +186,8 @@ class __$RepoDTOCopyWithImpl<$Res> extends _$RepoDTOCopyWithImpl<$Res>
 @JsonSerializable()
 class _$_RepoDTO extends _RepoDTO {
   const _$_RepoDTO(
-      {required this.id,
+      {required this.index,
+      required this.id,
       required this.name,
       required this.description,
       @JsonKey(name: 'star_count') required this.starCount,
@@ -181,6 +197,8 @@ class _$_RepoDTO extends _RepoDTO {
   factory _$_RepoDTO.fromJson(Map<String, dynamic> json) =>
       _$$_RepoDTOFromJson(json);
 
+  @override
+  final int index;
   @override
   final int id;
   @override
@@ -196,7 +214,7 @@ class _$_RepoDTO extends _RepoDTO {
 
   @override
   String toString() {
-    return 'RepoDTO(id: $id, name: $name, description: $description, starCount: $starCount, avatarUrl: $avatarUrl)';
+    return 'RepoDTO(index: $index, id: $id, name: $name, description: $description, starCount: $starCount, avatarUrl: $avatarUrl)';
   }
 
   @override
@@ -204,6 +222,7 @@ class _$_RepoDTO extends _RepoDTO {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _RepoDTO &&
+            const DeepCollectionEquality().equals(other.index, index) &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.name, name) &&
             const DeepCollectionEquality()
@@ -215,6 +234,7 @@ class _$_RepoDTO extends _RepoDTO {
   @override
   int get hashCode => Object.hash(
       runtimeType,
+      const DeepCollectionEquality().hash(index),
       const DeepCollectionEquality().hash(id),
       const DeepCollectionEquality().hash(name),
       const DeepCollectionEquality().hash(description),
@@ -234,7 +254,8 @@ class _$_RepoDTO extends _RepoDTO {
 
 abstract class _RepoDTO extends RepoDTO {
   const factory _RepoDTO(
-      {required int id,
+      {required int index,
+      required int id,
       required String name,
       required String description,
       @JsonKey(name: 'star_count') required int starCount,
@@ -243,6 +264,8 @@ abstract class _RepoDTO extends RepoDTO {
 
   factory _RepoDTO.fromJson(Map<String, dynamic> json) = _$_RepoDTO.fromJson;
 
+  @override
+  int get index;
   @override
   int get id;
   @override

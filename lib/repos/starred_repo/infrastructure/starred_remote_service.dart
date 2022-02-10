@@ -11,9 +11,11 @@ import 'repo_dto.dart';
 class StarredRemoteService {
   final Dio _dio;
   final HeadersLocalService _localService;
+  final PaginationConfig _pageConfig;
   StarredRemoteService(
     this._dio,
     this._localService,
+    this._pageConfig,
   );
 
   /// Performs [GET] request to get a page.
@@ -58,11 +60,11 @@ class StarredRemoteService {
 
       // success.
       if (response.statusCode == 200) {
-        final convertedData = (response.data as List<Map<String, dynamic>>)
-            .map(
-              (e) => RepoDTO.fromJson(e),
-            )
-            .toList();
+        final convertedData = PaginationConfig.addPaginationToResponse(
+          response.data as List<Map<String, dynamic>>,
+          page,
+        );
+
         return RemoteResponse.withData(
           data: convertedData,
           isNextPageAvailable: headersDTO.nextPage > page,
