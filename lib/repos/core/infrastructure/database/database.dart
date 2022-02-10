@@ -42,4 +42,7 @@ abstract class DataBase {
 
   /// Deletes the record.
   Future<void> deleteRecord(dynamic key);
+
+  /// count records.
+  Future<int> countRecords();
 }

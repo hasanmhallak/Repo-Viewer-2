@@ -3,6 +3,7 @@ import '../../core/infrastructure/pagination_config.dart';
 import 'repo_dto.dart';
 
 class StarredLocalService {
+  // TODO: move all pagination logic to PaginationService class.
   final DataBase _db;
 
   StarredLocalService(this._db);
@@ -25,6 +26,12 @@ class StarredLocalService {
       offset: databasePage * PaginationConfig.itemsPerPage,
     );
     return records.map((e) => RepoDTO.fromJson(e)).toList();
+  }
+
+  /// Checks if next page is available.
+  Future<bool> isNextPageAvailable(int page) async {
+    final repoCount = await _db.countRecords();
+    return PaginationConfig.isNextPageAvailable(repoCount, page);
   }
 
   /// Deletes repo from local storage.

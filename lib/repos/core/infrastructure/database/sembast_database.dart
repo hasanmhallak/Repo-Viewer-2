@@ -89,4 +89,9 @@ class SembastDbStore implements DataBase {
   Future<void> deleteRecord(dynamic key) async {
     await _store.record(key).delete(_db._instance);
   }
+
+  @override
+  Future<int> countRecords() async {
+    return _store.count(_db._instance);
+  }
 }
