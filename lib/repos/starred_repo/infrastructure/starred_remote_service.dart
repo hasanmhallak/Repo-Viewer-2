@@ -10,10 +10,11 @@ import 'repo_dto.dart';
 
 class StarredRemoteService {
   final Dio _dio;
-  final HeadersLocalService _localService;
+  final PaginationConfig _config;
+
   StarredRemoteService(
     this._dio,
-    this._localService,
+    this._config,
   );
 
   /// Performs [GET] request to get a page.
@@ -26,20 +27,11 @@ class StarredRemoteService {
   ///   - [RemoteResponse.withData] if the request was successful.
   ///
   /// May throw [RestApiException].
-  Future<RemoteResponse<List<RepoDTO>>> getPage(int page) async {
-    // TODO: this is a api logic related. move it to api.
-    final requestUrl = Uri.https(
-      'gitlab.com/api/v4',
-      '/users/user_name/starred_projects',
-      {
-        'page': page,
-        'per_page': PaginationConfig.itemsPerPage,
-        'simple': true,
-      },
-    );
-
-    final previousHeader =
-        await _localService.getHeaders(requestUrl.toString());
+  Future<RemoteResponse<List<RepoDTO>>> getPage(
+    int page,
+    HeaderDTO? previousHeader,
+    Uri requestUrl,
+  ) async {
     try {
       final response = await _dio.getUri(
         requestUrl,
@@ -54,30 +46,17 @@ class StarredRemoteService {
         requestUrl.toString(),
         response.headers.map,
       );
-      await _localService.saveHeaders(headersDTO);
 
-      // success.
-      if (response.statusCode == 200) {
-        final convertedData = PaginationConfig.addPaginationToResponse(
-          response.data as List<Map<String, dynamic>>,
-          page,
-        );
-
-        return RemoteResponse.withData(
-          data: convertedData,
-          isNextPageAvailable: headersDTO.nextPage > page,
-        );
-
-        // Not Modified.
-      } else if (response.statusCode == 304) {
-        return RemoteResponse.notModified(
-          isNextPageAvailable: headersDTO.nextPage > page,
-        );
-      } else {
-        throw RestApiException(
-          errorCode: response.statusCode,
-          message: response.statusMessage,
-        );
+      switch (response.statusCode) {
+        case 200:
+          return _ifSuccess(response.data, page, headersDTO);
+        case 304:
+          return _ifNotModified(headersDTO, page);
+        default:
+          throw RestApiException(
+            errorCode: response.statusCode,
+            message: response.statusMessage,
+          );
       }
     } on DioError catch (e) {
       if (e.isNoConnection) {
@@ -92,5 +71,26 @@ class StarredRemoteService {
         rethrow;
       }
     }
+  }
+
+  RemoteResponse<List<RepoDTO>> _ifSuccess(
+    dynamic data,
+    int page,
+    HeaderDTO headersDTO,
+  ) {
+    data as List<Map<String, dynamic>>;
+    final convertedData = _config.addPaginationToResponse(data, page);
+    return RemoteResponse.withData(
+      headers: headersDTO,
+      data: convertedData,
+      isNextPageAvailable: headersDTO.nextPage > page,
+    );
+  }
+
+  RemoteResponse<List<RepoDTO>> _ifNotModified(HeaderDTO headersDTO, int page) {
+    return RemoteResponse.notModified(
+      headers: headersDTO,
+      isNextPageAvailable: headersDTO.nextPage > page,
+    );
   }
 }

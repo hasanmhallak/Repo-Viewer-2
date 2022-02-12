@@ -3,27 +3,27 @@ import '../../core/infrastructure/pagination_config.dart';
 import 'repo_dto.dart';
 
 class StarredLocalService {
-  // TODO: move all pagination logic to PaginationService class.
   final DataBase _db;
-
-  StarredLocalService(this._db);
+  final PaginationConfig _config;
+  StarredLocalService(this._db, this._config);
 
   /// Inserts and Updates local storage.
   Future<void> upsertPage(List<RepoDTO> dtos) async {
     // Preparing data.
-    final databaseKeys = dtos.map((dto) => dto.index).toList();
-    final records = dtos.map((e) => e.toJson()).toList();
+    final databaseKeys = <int>[];
+    final records = dtos.map((dto) {
+      databaseKeys.add(dto.index);
+      return dto.toJson();
+    }).toList();
 
     await _db.saveRecords(databaseKeys, records);
   }
 
   /// Gets a page from local storage.
-  Future<List<RepoDTO>> getPage(int page) async {
-    final databasePage =
-        PaginationConfig.calculateDatabasePageFromServerPage(page);
+  Future<List<RepoDTO>> getPage(int serverPage) async {
     final records = await _db.findRecords(
-      limit: PaginationConfig.itemsPerPage,
-      offset: databasePage * PaginationConfig.itemsPerPage,
+      limit: _config.itemsPerPage,
+      offset: _config.getOffset(serverPage),
     );
     return records.map((e) => RepoDTO.fromJson(e)).toList();
   }
@@ -31,7 +31,7 @@ class StarredLocalService {
   /// Checks if next page is available.
   Future<bool> isNextPageAvailable(int page) async {
     final repoCount = await _db.countRecords();
-    return PaginationConfig.isNextPageAvailable(repoCount, page);
+    return _config.isNextPageAvailable(repoCount, page);
   }
 
   /// Deletes repo from local storage.
@@ -45,13 +45,17 @@ class StarredLocalService {
     final records = await _db.findRecords(offset: databaseIndex);
     // get the keys.
     final keysToUpdate = records.map((e) => RepoDTO.fromJson(e).index).toList();
-    // deletes all the repos from database.
-    await _db.deleteRecords(keysToUpdate);
+
+    final lastItemKeyToDelete = keysToUpdate.last;
 
     // delete the repo from the records list.
+    // TODO: you can use Sets to improve time complexity.
     records.removeAt(0);
 
     // update database.
     await _db.saveRecords(keysToUpdate, records);
+
+    // remove the last item.
+    await _db.deleteRecord(lastItemKeyToDelete);
   }
 }

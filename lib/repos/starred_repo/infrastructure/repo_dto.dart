@@ -33,15 +33,4 @@ class RepoDTO with _$RepoDTO {
       avatarUrl: _.avatarUrl,
     );
   }
-
-  Repo toDomain() {
-    return Repo(
-      index: index,
-      id: id,
-      name: name,
-      description: description,
-      starCount: starCount,
-      avatarUrl: avatarUrl,
-    );
-  }
 }

@@ -21,16 +21,21 @@ class _$RemoteResponseTearOff {
     return _NoConnection<T>();
   }
 
-  _NotModified<T> notModified<T>({required bool isNextPageAvailable}) {
+  _NotModified<T> notModified<T>(
+      {required HeaderDTO headers, required bool isNextPageAvailable}) {
     return _NotModified<T>(
+      headers: headers,
       isNextPageAvailable: isNextPageAvailable,
     );
   }
 
   _WithData<T> withData<T>(
-      {required T data, required bool isNextPageAvailable}) {
+      {required T data,
+      required HeaderDTO headers,
+      required bool isNextPageAvailable}) {
     return _WithData<T>(
       data: data,
+      headers: headers,
       isNextPageAvailable: isNextPageAvailable,
     );
   }
@@ -44,22 +49,27 @@ mixin _$RemoteResponse<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() noConnection,
-    required TResult Function(bool isNextPageAvailable) notModified,
-    required TResult Function(T data, bool isNextPageAvailable) withData,
+    required TResult Function(HeaderDTO headers, bool isNextPageAvailable)
+        notModified,
+    required TResult Function(
+            T data, HeaderDTO headers, bool isNextPageAvailable)
+        withData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -146,8 +156,11 @@ class _$_NoConnection<T> extends _NoConnection<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() noConnection,
-    required TResult Function(bool isNextPageAvailable) notModified,
-    required TResult Function(T data, bool isNextPageAvailable) withData,
+    required TResult Function(HeaderDTO headers, bool isNextPageAvailable)
+        notModified,
+    required TResult Function(
+            T data, HeaderDTO headers, bool isNextPageAvailable)
+        withData,
   }) {
     return noConnection();
   }
@@ -156,8 +169,9 @@ class _$_NoConnection<T> extends _NoConnection<T> {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
   }) {
     return noConnection?.call();
   }
@@ -166,8 +180,9 @@ class _$_NoConnection<T> extends _NoConnection<T> {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
     required TResult orElse(),
   }) {
     if (noConnection != null) {
@@ -221,7 +236,9 @@ abstract class _$NotModifiedCopyWith<T, $Res> {
   factory _$NotModifiedCopyWith(
           _NotModified<T> value, $Res Function(_NotModified<T>) then) =
       __$NotModifiedCopyWithImpl<T, $Res>;
-  $Res call({bool isNextPageAvailable});
+  $Res call({HeaderDTO headers, bool isNextPageAvailable});
+
+  $HeaderDTOCopyWith<$Res> get headers;
 }
 
 /// @nodoc
@@ -237,28 +254,44 @@ class __$NotModifiedCopyWithImpl<T, $Res>
 
   @override
   $Res call({
+    Object? headers = freezed,
     Object? isNextPageAvailable = freezed,
   }) {
     return _then(_NotModified<T>(
+      headers: headers == freezed
+          ? _value.headers
+          : headers // ignore: cast_nullable_to_non_nullable
+              as HeaderDTO,
       isNextPageAvailable: isNextPageAvailable == freezed
           ? _value.isNextPageAvailable
           : isNextPageAvailable // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
+
+  @override
+  $HeaderDTOCopyWith<$Res> get headers {
+    return $HeaderDTOCopyWith<$Res>(_value.headers, (value) {
+      return _then(_value.copyWith(headers: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_NotModified<T> extends _NotModified<T> {
-  const _$_NotModified({required this.isNextPageAvailable}) : super._();
+  const _$_NotModified(
+      {required this.headers, required this.isNextPageAvailable})
+      : super._();
 
+  @override
+  final HeaderDTO headers;
   @override
   final bool isNextPageAvailable;
 
   @override
   String toString() {
-    return 'RemoteResponse<$T>.notModified(isNextPageAvailable: $isNextPageAvailable)';
+    return 'RemoteResponse<$T>.notModified(headers: $headers, isNextPageAvailable: $isNextPageAvailable)';
   }
 
   @override
@@ -266,13 +299,16 @@ class _$_NotModified<T> extends _NotModified<T> {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _NotModified<T> &&
+            const DeepCollectionEquality().equals(other.headers, headers) &&
             const DeepCollectionEquality()
                 .equals(other.isNextPageAvailable, isNextPageAvailable));
   }
 
   @override
   int get hashCode => Object.hash(
-      runtimeType, const DeepCollectionEquality().hash(isNextPageAvailable));
+      runtimeType,
+      const DeepCollectionEquality().hash(headers),
+      const DeepCollectionEquality().hash(isNextPageAvailable));
 
   @JsonKey(ignore: true)
   @override
@@ -283,32 +319,37 @@ class _$_NotModified<T> extends _NotModified<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() noConnection,
-    required TResult Function(bool isNextPageAvailable) notModified,
-    required TResult Function(T data, bool isNextPageAvailable) withData,
+    required TResult Function(HeaderDTO headers, bool isNextPageAvailable)
+        notModified,
+    required TResult Function(
+            T data, HeaderDTO headers, bool isNextPageAvailable)
+        withData,
   }) {
-    return notModified(isNextPageAvailable);
+    return notModified(headers, isNextPageAvailable);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
   }) {
-    return notModified?.call(isNextPageAvailable);
+    return notModified?.call(headers, isNextPageAvailable);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
     required TResult orElse(),
   }) {
     if (notModified != null) {
-      return notModified(isNextPageAvailable);
+      return notModified(headers, isNextPageAvailable);
     }
     return orElse();
   }
@@ -349,10 +390,12 @@ class _$_NotModified<T> extends _NotModified<T> {
 }
 
 abstract class _NotModified<T> extends RemoteResponse<T> {
-  const factory _NotModified({required bool isNextPageAvailable}) =
-      _$_NotModified<T>;
+  const factory _NotModified(
+      {required HeaderDTO headers,
+      required bool isNextPageAvailable}) = _$_NotModified<T>;
   const _NotModified._() : super._();
 
+  HeaderDTO get headers;
   bool get isNextPageAvailable;
   @JsonKey(ignore: true)
   _$NotModifiedCopyWith<T, _NotModified<T>> get copyWith =>
@@ -364,7 +407,9 @@ abstract class _$WithDataCopyWith<T, $Res> {
   factory _$WithDataCopyWith(
           _WithData<T> value, $Res Function(_WithData<T>) then) =
       __$WithDataCopyWithImpl<T, $Res>;
-  $Res call({T data, bool isNextPageAvailable});
+  $Res call({T data, HeaderDTO headers, bool isNextPageAvailable});
+
+  $HeaderDTOCopyWith<$Res> get headers;
 }
 
 /// @nodoc
@@ -381,6 +426,7 @@ class __$WithDataCopyWithImpl<T, $Res>
   @override
   $Res call({
     Object? data = freezed,
+    Object? headers = freezed,
     Object? isNextPageAvailable = freezed,
   }) {
     return _then(_WithData<T>(
@@ -388,28 +434,44 @@ class __$WithDataCopyWithImpl<T, $Res>
           ? _value.data
           : data // ignore: cast_nullable_to_non_nullable
               as T,
+      headers: headers == freezed
+          ? _value.headers
+          : headers // ignore: cast_nullable_to_non_nullable
+              as HeaderDTO,
       isNextPageAvailable: isNextPageAvailable == freezed
           ? _value.isNextPageAvailable
           : isNextPageAvailable // ignore: cast_nullable_to_non_nullable
               as bool,
     ));
   }
+
+  @override
+  $HeaderDTOCopyWith<$Res> get headers {
+    return $HeaderDTOCopyWith<$Res>(_value.headers, (value) {
+      return _then(_value.copyWith(headers: value));
+    });
+  }
 }
 
 /// @nodoc
 
 class _$_WithData<T> extends _WithData<T> {
-  const _$_WithData({required this.data, required this.isNextPageAvailable})
+  const _$_WithData(
+      {required this.data,
+      required this.headers,
+      required this.isNextPageAvailable})
       : super._();
 
   @override
   final T data;
   @override
+  final HeaderDTO headers;
+  @override
   final bool isNextPageAvailable;
 
   @override
   String toString() {
-    return 'RemoteResponse<$T>.withData(data: $data, isNextPageAvailable: $isNextPageAvailable)';
+    return 'RemoteResponse<$T>.withData(data: $data, headers: $headers, isNextPageAvailable: $isNextPageAvailable)';
   }
 
   @override
@@ -418,6 +480,7 @@ class _$_WithData<T> extends _WithData<T> {
         (other.runtimeType == runtimeType &&
             other is _WithData<T> &&
             const DeepCollectionEquality().equals(other.data, data) &&
+            const DeepCollectionEquality().equals(other.headers, headers) &&
             const DeepCollectionEquality()
                 .equals(other.isNextPageAvailable, isNextPageAvailable));
   }
@@ -426,6 +489,7 @@ class _$_WithData<T> extends _WithData<T> {
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(data),
+      const DeepCollectionEquality().hash(headers),
       const DeepCollectionEquality().hash(isNextPageAvailable));
 
   @JsonKey(ignore: true)
@@ -437,32 +501,37 @@ class _$_WithData<T> extends _WithData<T> {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() noConnection,
-    required TResult Function(bool isNextPageAvailable) notModified,
-    required TResult Function(T data, bool isNextPageAvailable) withData,
+    required TResult Function(HeaderDTO headers, bool isNextPageAvailable)
+        notModified,
+    required TResult Function(
+            T data, HeaderDTO headers, bool isNextPageAvailable)
+        withData,
   }) {
-    return withData(data, isNextPageAvailable);
+    return withData(data, headers, isNextPageAvailable);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
   }) {
-    return withData?.call(data, isNextPageAvailable);
+    return withData?.call(data, headers, isNextPageAvailable);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? noConnection,
-    TResult Function(bool isNextPageAvailable)? notModified,
-    TResult Function(T data, bool isNextPageAvailable)? withData,
+    TResult Function(HeaderDTO headers, bool isNextPageAvailable)? notModified,
+    TResult Function(T data, HeaderDTO headers, bool isNextPageAvailable)?
+        withData,
     required TResult orElse(),
   }) {
     if (withData != null) {
-      return withData(data, isNextPageAvailable);
+      return withData(data, headers, isNextPageAvailable);
     }
     return orElse();
   }
@@ -504,10 +573,13 @@ class _$_WithData<T> extends _WithData<T> {
 
 abstract class _WithData<T> extends RemoteResponse<T> {
   const factory _WithData(
-      {required T data, required bool isNextPageAvailable}) = _$_WithData<T>;
+      {required T data,
+      required HeaderDTO headers,
+      required bool isNextPageAvailable}) = _$_WithData<T>;
   const _WithData._() : super._();
 
   T get data;
+  HeaderDTO get headers;
   bool get isNextPageAvailable;
   @JsonKey(ignore: true)
   _$WithDataCopyWith<T, _WithData<T>> get copyWith =>

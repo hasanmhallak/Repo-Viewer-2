@@ -5,10 +5,13 @@ import '../../starred_repo/infrastructure/repo_dto.dart';
 
 // ignore: avoid_classes_with_only_static_members
 class PaginationConfig {
-  static const itemsPerPage = 30;
+  const PaginationConfig();
+
+  static const _itemsPerPage = 30;
+  int get itemsPerPage => _itemsPerPage;
 
   /// Returns an `int` which will be used as a key in the database.
-  static int getDatabaseKey(int serverIndex, int serverPage) {
+  int getDatabaseKey(int serverIndex, int serverPage) {
     final databasePage = calculateDatabasePageFromServerPage(serverPage);
 
     //  sever page 1   ||   sever page 2   ||   sever page 3   ||
@@ -19,17 +22,27 @@ class PaginationConfig {
   }
 
   /// Returns database's page.
-  static int calculateDatabasePageFromServerPage(int page) => page - 1;
+  int calculateDatabasePageFromServerPage(int serverPage) => serverPage - 1;
 
-  static List<RepoDTO> addPaginationToResponse(
+  List<RepoDTO> addPaginationToResponse(
     List<Map<String, dynamic>> data,
     int serverPage,
   ) {
     return data.mapIndexed(
       (index, data) {
-        data['index'] = PaginationConfig.getDatabaseKey(index, serverPage);
+        data['index'] = getDatabaseKey(index, serverPage);
         return RepoDTO.fromJson(data);
       },
     ).toList();
+  }
+
+  bool isNextPageAvailable(int repoCount, int page) {
+    final nextPage = (repoCount / itemsPerPage).ceil();
+    return page < nextPage;
+  }
+
+  int getOffset(int serverPage) {
+    final databasePage = calculateDatabasePageFromServerPage(serverPage);
+    return databasePage * itemsPerPage;
   }
 }
