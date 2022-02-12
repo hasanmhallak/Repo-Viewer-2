@@ -1,3 +1,5 @@
+import 'package:dartz/dartz.dart';
+
 import '../../../core/infrastructure/api/api.dart';
 import '../../core/domain/fresh.dart';
 import '../../core/domain/repo_failure.dart';
@@ -25,7 +27,9 @@ class StarredRepository {
         _headersLocalService = headersLocalService,
         _apiStore = apiStore;
 
-  Future getStarredReposPage(int page) async {
+  Future<Either<RepoFailure, Fresh<List<Repo>>>> getStarredReposPage(
+    int page,
+  ) async {
     final requestUrl = _getStarredReposUrl(page);
 
     final previousHeader = await _getPreviousHeaders(requestUrl);
@@ -34,21 +38,23 @@ class StarredRepository {
       final remoteResponse =
           await _remoteService.getPage(page, previousHeader, requestUrl);
 
-      remoteResponse.when(
-        noConnection: () => _noConnection(page),
-        notModified: (headers, isNextPageAvailable) => _notModified(
-          headers,
-          isNextPageAvailable,
-          page,
-        ),
-        withData: (data, headers, isNextPageAvailable) => _withData(
-          data,
-          headers,
-          isNextPageAvailable,
+      return right(
+        await remoteResponse.when(
+          noConnection: () => _noConnection(page),
+          notModified: (headers, isNextPageAvailable) => _notModified(
+            headers,
+            isNextPageAvailable,
+            page,
+          ),
+          withData: (data, headers, isNextPageAvailable) => _withData(
+            data,
+            headers,
+            isNextPageAvailable,
+          ),
         ),
       );
     } on RestApiException catch (e) {
-      return RepoFailure.api(code: e.errorCode, message: e.message);
+      return left(RepoFailure.api(code: e.errorCode, message: e.message));
     }
   }
 
