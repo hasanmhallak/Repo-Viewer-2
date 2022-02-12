@@ -25,7 +25,7 @@ class Fresh<T> with _$Fresh<T> {
 
   factory Fresh.no(
     T data, {
-    required bool isNextPageAvailable,
+    bool isNextPageAvailable = false,
   }) {
     return Fresh(
       isFresh: false,

@@ -17,24 +17,28 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$StarredStateTearOff {
   const _$StarredStateTearOff();
 
-  _Initial initial() {
-    return const _Initial();
-  }
-
-  _Loading loading() {
-    return const _Loading();
-  }
-
-  _Loaded loaded(dynamic repos) {
-    return _Loaded(
-      repos,
+  _Initial initial(Fresh<List<Repo>> freshRepos) {
+    return _Initial(
+      freshRepos,
     );
   }
 
-  _Failure failure(RepoFailure failure, dynamic repos) {
+  _Loading loading(Fresh<List<Repo>> freshRepos) {
+    return _Loading(
+      freshRepos,
+    );
+  }
+
+  _Loaded loaded(Fresh<List<Repo>> freshRepos) {
+    return _Loaded(
+      freshRepos,
+    );
+  }
+
+  _Failure failure(RepoFailure failure, Fresh<List<Repo>> freshRepos) {
     return _Failure(
       failure,
-      repos,
+      freshRepos,
     );
   }
 }
@@ -44,28 +48,33 @@ const $StarredState = _$StarredStateTearOff();
 
 /// @nodoc
 mixin _$StarredState {
+  Fresh<List<Repo>> get freshRepos => throw _privateConstructorUsedError;
+
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(dynamic repos) loaded,
-    required TResult Function(RepoFailure failure, dynamic repos) failure,
+    required TResult Function(Fresh<List<Repo>> freshRepos) initial,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
+    required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
+        failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -94,6 +103,10 @@ mixin _$StarredState {
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
+
+  @JsonKey(ignore: true)
+  $StarredStateCopyWith<StarredState> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
@@ -101,6 +114,9 @@ abstract class $StarredStateCopyWith<$Res> {
   factory $StarredStateCopyWith(
           StarredState value, $Res Function(StarredState) then) =
       _$StarredStateCopyWithImpl<$Res>;
+  $Res call({Fresh<List<Repo>> freshRepos});
+
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos;
 }
 
 /// @nodoc
@@ -110,12 +126,36 @@ class _$StarredStateCopyWithImpl<$Res> implements $StarredStateCopyWith<$Res> {
   final StarredState _value;
   // ignore: unused_field
   final $Res Function(StarredState) _then;
+
+  @override
+  $Res call({
+    Object? freshRepos = freezed,
+  }) {
+    return _then(_value.copyWith(
+      freshRepos: freshRepos == freezed
+          ? _value.freshRepos
+          : freshRepos // ignore: cast_nullable_to_non_nullable
+              as Fresh<List<Repo>>,
+    ));
+  }
+
+  @override
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos {
+    return $FreshCopyWith<List<Repo>, $Res>(_value.freshRepos, (value) {
+      return _then(_value.copyWith(freshRepos: value));
+    });
+  }
 }
 
 /// @nodoc
-abstract class _$InitialCopyWith<$Res> {
+abstract class _$InitialCopyWith<$Res> implements $StarredStateCopyWith<$Res> {
   factory _$InitialCopyWith(_Initial value, $Res Function(_Initial) then) =
       __$InitialCopyWithImpl<$Res>;
+  @override
+  $Res call({Fresh<List<Repo>> freshRepos});
+
+  @override
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos;
 }
 
 /// @nodoc
@@ -126,60 +166,87 @@ class __$InitialCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
 
   @override
   _Initial get _value => super._value as _Initial;
+
+  @override
+  $Res call({
+    Object? freshRepos = freezed,
+  }) {
+    return _then(_Initial(
+      freshRepos == freezed
+          ? _value.freshRepos
+          : freshRepos // ignore: cast_nullable_to_non_nullable
+              as Fresh<List<Repo>>,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_Initial extends _Initial {
-  const _$_Initial() : super._();
+  const _$_Initial(this.freshRepos) : super._();
+
+  @override
+  final Fresh<List<Repo>> freshRepos;
 
   @override
   String toString() {
-    return 'StarredState.initial()';
+    return 'StarredState.initial(freshRepos: $freshRepos)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Initial);
+        (other.runtimeType == runtimeType &&
+            other is _Initial &&
+            const DeepCollectionEquality()
+                .equals(other.freshRepos, freshRepos));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(freshRepos));
+
+  @JsonKey(ignore: true)
+  @override
+  _$InitialCopyWith<_Initial> get copyWith =>
+      __$InitialCopyWithImpl<_Initial>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(dynamic repos) loaded,
-    required TResult Function(RepoFailure failure, dynamic repos) failure,
+    required TResult Function(Fresh<List<Repo>> freshRepos) initial,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
+    required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
+        failure,
   }) {
-    return initial();
+    return initial(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
   }) {
-    return initial?.call();
+    return initial?.call(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
     required TResult orElse(),
   }) {
     if (initial != null) {
-      return initial();
+      return initial(freshRepos);
     }
     return orElse();
   }
@@ -223,14 +290,26 @@ class _$_Initial extends _Initial {
 }
 
 abstract class _Initial extends StarredState {
-  const factory _Initial() = _$_Initial;
+  const factory _Initial(Fresh<List<Repo>> freshRepos) = _$_Initial;
   const _Initial._() : super._();
+
+  @override
+  Fresh<List<Repo>> get freshRepos;
+  @override
+  @JsonKey(ignore: true)
+  _$InitialCopyWith<_Initial> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$LoadingCopyWith<$Res> {
+abstract class _$LoadingCopyWith<$Res> implements $StarredStateCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
+  @override
+  $Res call({Fresh<List<Repo>> freshRepos});
+
+  @override
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos;
 }
 
 /// @nodoc
@@ -241,60 +320,87 @@ class __$LoadingCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
 
   @override
   _Loading get _value => super._value as _Loading;
+
+  @override
+  $Res call({
+    Object? freshRepos = freezed,
+  }) {
+    return _then(_Loading(
+      freshRepos == freezed
+          ? _value.freshRepos
+          : freshRepos // ignore: cast_nullable_to_non_nullable
+              as Fresh<List<Repo>>,
+    ));
+  }
 }
 
 /// @nodoc
 
 class _$_Loading extends _Loading {
-  const _$_Loading() : super._();
+  const _$_Loading(this.freshRepos) : super._();
+
+  @override
+  final Fresh<List<Repo>> freshRepos;
 
   @override
   String toString() {
-    return 'StarredState.loading()';
+    return 'StarredState.loading(freshRepos: $freshRepos)';
   }
 
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _Loading);
+        (other.runtimeType == runtimeType &&
+            other is _Loading &&
+            const DeepCollectionEquality()
+                .equals(other.freshRepos, freshRepos));
   }
 
   @override
-  int get hashCode => runtimeType.hashCode;
+  int get hashCode =>
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(freshRepos));
+
+  @JsonKey(ignore: true)
+  @override
+  _$LoadingCopyWith<_Loading> get copyWith =>
+      __$LoadingCopyWithImpl<_Loading>(this, _$identity);
 
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(dynamic repos) loaded,
-    required TResult Function(RepoFailure failure, dynamic repos) failure,
+    required TResult Function(Fresh<List<Repo>> freshRepos) initial,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
+    required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
+        failure,
   }) {
-    return loading();
+    return loading(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
   }) {
-    return loading?.call();
+    return loading?.call(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading();
+      return loading(freshRepos);
     }
     return orElse();
   }
@@ -338,15 +444,26 @@ class _$_Loading extends _Loading {
 }
 
 abstract class _Loading extends StarredState {
-  const factory _Loading() = _$_Loading;
+  const factory _Loading(Fresh<List<Repo>> freshRepos) = _$_Loading;
   const _Loading._() : super._();
+
+  @override
+  Fresh<List<Repo>> get freshRepos;
+  @override
+  @JsonKey(ignore: true)
+  _$LoadingCopyWith<_Loading> get copyWith =>
+      throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$LoadedCopyWith<$Res> {
+abstract class _$LoadedCopyWith<$Res> implements $StarredStateCopyWith<$Res> {
   factory _$LoadedCopyWith(_Loaded value, $Res Function(_Loaded) then) =
       __$LoadedCopyWithImpl<$Res>;
-  $Res call({dynamic repos});
+  @override
+  $Res call({Fresh<List<Repo>> freshRepos});
+
+  @override
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos;
 }
 
 /// @nodoc
@@ -360,10 +477,13 @@ class __$LoadedCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
 
   @override
   $Res call({
-    Object? repos = freezed,
+    Object? freshRepos = freezed,
   }) {
     return _then(_Loaded(
-      repos == freezed ? _value.repos : repos,
+      freshRepos == freezed
+          ? _value.freshRepos
+          : freshRepos // ignore: cast_nullable_to_non_nullable
+              as Fresh<List<Repo>>,
     ));
   }
 }
@@ -371,14 +491,14 @@ class __$LoadedCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loaded extends _Loaded {
-  const _$_Loaded(this.repos) : super._();
+  const _$_Loaded(this.freshRepos) : super._();
 
   @override
-  final dynamic repos;
+  final Fresh<List<Repo>> freshRepos;
 
   @override
   String toString() {
-    return 'StarredState.loaded(repos: $repos)';
+    return 'StarredState.loaded(freshRepos: $freshRepos)';
   }
 
   @override
@@ -386,12 +506,13 @@ class _$_Loaded extends _Loaded {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _Loaded &&
-            const DeepCollectionEquality().equals(other.repos, repos));
+            const DeepCollectionEquality()
+                .equals(other.freshRepos, freshRepos));
   }
 
   @override
   int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(repos));
+      Object.hash(runtimeType, const DeepCollectionEquality().hash(freshRepos));
 
   @JsonKey(ignore: true)
   @override
@@ -401,36 +522,39 @@ class _$_Loaded extends _Loaded {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(dynamic repos) loaded,
-    required TResult Function(RepoFailure failure, dynamic repos) failure,
+    required TResult Function(Fresh<List<Repo>> freshRepos) initial,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
+    required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
+        failure,
   }) {
-    return loaded(repos);
+    return loaded(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
   }) {
-    return loaded?.call(repos);
+    return loaded?.call(freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
     required TResult orElse(),
   }) {
     if (loaded != null) {
-      return loaded(repos);
+      return loaded(freshRepos);
     }
     return orElse();
   }
@@ -474,19 +598,26 @@ class _$_Loaded extends _Loaded {
 }
 
 abstract class _Loaded extends StarredState {
-  const factory _Loaded(dynamic repos) = _$_Loaded;
+  const factory _Loaded(Fresh<List<Repo>> freshRepos) = _$_Loaded;
   const _Loaded._() : super._();
 
-  dynamic get repos;
+  @override
+  Fresh<List<Repo>> get freshRepos;
+  @override
   @JsonKey(ignore: true)
   _$LoadedCopyWith<_Loaded> get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$FailureCopyWith<$Res> {
+abstract class _$FailureCopyWith<$Res> implements $StarredStateCopyWith<$Res> {
   factory _$FailureCopyWith(_Failure value, $Res Function(_Failure) then) =
       __$FailureCopyWithImpl<$Res>;
-  $Res call({RepoFailure failure, dynamic repos});
+  @override
+  $Res call({RepoFailure failure, Fresh<List<Repo>> freshRepos});
+
+  $RepoFailureCopyWith<$Res> get failure;
+  @override
+  $FreshCopyWith<List<Repo>, $Res> get freshRepos;
 }
 
 /// @nodoc
@@ -501,31 +632,41 @@ class __$FailureCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? failure = freezed,
-    Object? repos = freezed,
+    Object? freshRepos = freezed,
   }) {
     return _then(_Failure(
       failure == freezed
           ? _value.failure
           : failure // ignore: cast_nullable_to_non_nullable
               as RepoFailure,
-      repos == freezed ? _value.repos : repos,
+      freshRepos == freezed
+          ? _value.freshRepos
+          : freshRepos // ignore: cast_nullable_to_non_nullable
+              as Fresh<List<Repo>>,
     ));
+  }
+
+  @override
+  $RepoFailureCopyWith<$Res> get failure {
+    return $RepoFailureCopyWith<$Res>(_value.failure, (value) {
+      return _then(_value.copyWith(failure: value));
+    });
   }
 }
 
 /// @nodoc
 
 class _$_Failure extends _Failure {
-  const _$_Failure(this.failure, this.repos) : super._();
+  const _$_Failure(this.failure, this.freshRepos) : super._();
 
   @override
   final RepoFailure failure;
   @override
-  final dynamic repos;
+  final Fresh<List<Repo>> freshRepos;
 
   @override
   String toString() {
-    return 'StarredState.failure(failure: $failure, repos: $repos)';
+    return 'StarredState.failure(failure: $failure, freshRepos: $freshRepos)';
   }
 
   @override
@@ -534,14 +675,15 @@ class _$_Failure extends _Failure {
         (other.runtimeType == runtimeType &&
             other is _Failure &&
             const DeepCollectionEquality().equals(other.failure, failure) &&
-            const DeepCollectionEquality().equals(other.repos, repos));
+            const DeepCollectionEquality()
+                .equals(other.freshRepos, freshRepos));
   }
 
   @override
   int get hashCode => Object.hash(
       runtimeType,
       const DeepCollectionEquality().hash(failure),
-      const DeepCollectionEquality().hash(repos));
+      const DeepCollectionEquality().hash(freshRepos));
 
   @JsonKey(ignore: true)
   @override
@@ -551,36 +693,39 @@ class _$_Failure extends _Failure {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function() initial,
-    required TResult Function() loading,
-    required TResult Function(dynamic repos) loaded,
-    required TResult Function(RepoFailure failure, dynamic repos) failure,
+    required TResult Function(Fresh<List<Repo>> freshRepos) initial,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
+    required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
+        failure,
   }) {
-    return failure(this.failure, repos);
+    return failure(this.failure, freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
   }) {
-    return failure?.call(this.failure, repos);
+    return failure?.call(this.failure, freshRepos);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function()? initial,
-    TResult Function()? loading,
-    TResult Function(dynamic repos)? loaded,
-    TResult Function(RepoFailure failure, dynamic repos)? failure,
+    TResult Function(Fresh<List<Repo>> freshRepos)? initial,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
+    TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
+        failure,
     required TResult orElse(),
   }) {
     if (failure != null) {
-      return failure(this.failure, repos);
+      return failure(this.failure, freshRepos);
     }
     return orElse();
   }
@@ -624,11 +769,14 @@ class _$_Failure extends _Failure {
 }
 
 abstract class _Failure extends StarredState {
-  const factory _Failure(RepoFailure failure, dynamic repos) = _$_Failure;
+  const factory _Failure(RepoFailure failure, Fresh<List<Repo>> freshRepos) =
+      _$_Failure;
   const _Failure._() : super._();
 
   RepoFailure get failure;
-  dynamic get repos;
+  @override
+  Fresh<List<Repo>> get freshRepos;
+  @override
   @JsonKey(ignore: true)
   _$FailureCopyWith<_Failure> get copyWith =>
       throw _privateConstructorUsedError;
