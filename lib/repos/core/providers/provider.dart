@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../infrastructure/database/sembast_database.dart';
@@ -19,4 +20,9 @@ final sembastProvider = Provider<SembastDatabase>((ref) {
 /// This would hold [Database] registration, [Interceptors]... etc.
 final initializationProvider = Provider((ref) async {
   await ref.read(sembastProvider).init();
+});
+
+/// Dio instance that must be intercepted to add `userName` and `credentials`.
+final dioForStarredProvider = Provider<Dio>((ref) {
+  return Dio();
 });

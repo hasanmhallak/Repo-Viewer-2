@@ -17,9 +17,7 @@ class StarredBloc extends Bloc<StarredEvent, StarredState> {
   int _page = 1;
   StarredBloc(this._repository) : super(StarredState.initial(Fresh.no([]))) {
     on<StarredEvent>((event, emit) {
-      event.when(
-        getNextPage: () => _getNextPage(_page, emit),
-      );
+      _getNextPage(_page, emit);
     });
   }
 

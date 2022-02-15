@@ -4,7 +4,7 @@ import 'package:repo_viewer/repos/core/infrastructure/dto/header_dto.dart';
 class HeadersLocalService {
   final DataBase _db;
 
-  HeadersLocalService(this._db);
+  const HeadersLocalService(this._db);
 
   /// Save headers to local storage.
   Future<void> saveHeaders(HeaderDTO dto) async {
