@@ -1,6 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../domain/auth_repository.dart';
+import '../infrastructure/auth_repository.dart';
 import '../infrastructure/type_defs/type_defs.dart';
 import 'auth_state.dart';
 

@@ -2,10 +2,10 @@ import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:oauth2/oauth2.dart';
 
-import '../infrastructure/auth_local_service.dart';
-import '../infrastructure/auth_remote_service.dart';
-import '../infrastructure/type_defs/type_defs.dart';
-import 'entities/auth_failure.dart';
+import '../domain/entities/auth_failure.dart';
+import 'auth_local_service.dart';
+import 'auth_remote_service.dart';
+import 'type_defs/type_defs.dart';
 
 class AuthRepository {
   final AuthLocalService _localService;
