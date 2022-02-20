@@ -10,43 +10,36 @@ import 'type_defs/type_defs.dart';
 class AuthRepository {
   final AuthLocalService _localService;
   final AuthRemoteService _remoteService;
-
   AuthRepository(this._localService, this._remoteService);
 
-  Credentials? _cachedCredentials;
-
-  /// Returns [Credentials] from cache or local storage.
+  /// Clears credentials form local service.
   ///
-  /// Refreshes [Credentials] if needed.
-  Future<Credentials?> getCredentials() async {
-    if (_cachedCredentials != null && !_cachedCredentials!.isExpired) {
-      return _cachedCredentials;
-    } else {
-      try {
-        final json = await _localService.read();
-        if (json == null) return null;
-        final credentials = Credentials.fromJson(json);
-        if (credentials.isExpired && credentials.canRefresh) {
-          final refreshedCredentials = await _refreshCredentials(credentials);
-          refreshedCredentials.fold(
-            (authFailure) => null,
-            (credentials) async {
-              await _setCredentials(credentials);
-              return credentials;
-            },
-          );
-        } else {
-          return _cachedCredentials = credentials;
-        }
-      } on PlatformException {
-        return null;
-      }
-    }
+  /// Can throw [PlatformException].
+  Future<void> _clearCredentials() async {
+    await _localService.delete();
   }
 
-  /// Returns `true` if the user is signed in.
-  Future<bool> get isSignedIn {
-    return getCredentials().then((credentials) => credentials != null);
+  /// Saves credentials to local service.
+  ///
+  /// Can throw [PlatformException].
+  Future<void> _saveCredentials(Credentials credentials) async {
+    await _localService.save(credentials.toJson());
+  }
+
+  /// Returns [Credentials] or [AuthFailure].
+  Future<Either<AuthFailure, Credentials>> getCredentials() async {
+    try {
+      final json = await _localService.read();
+      if (json == null) {
+        return left(
+            const AuthFailure.storage('No Credentials was found in storage.'));
+      } else {
+        final credentials = Credentials.fromJson(json);
+        return right(credentials);
+      }
+    } on PlatformException catch (e) {
+      return left(AuthFailure.storage('${e.code}: ${e.message}'));
+    }
   }
 
   /// Starts the sign-in process.
@@ -58,7 +51,8 @@ class AuthRepository {
   /// be exchanged for an accessToken.
   ///
   /// Returns [Unit] if the process succeeded.
-  Future<Either<AuthFailure, Unit>> signin(AuthHandler authHandler) async {
+  Future<Either<AuthFailure, Credentials>> signin(
+      AuthHandler authHandler) async {
     final grant = _remoteService.getGrant();
     final authUri = _remoteService.getAuthUrl(grant);
     final authorizedUri = await authHandler(authUri);
@@ -67,28 +61,28 @@ class AuthRepository {
         grant,
         authorizedUri.queryParameters,
       );
-      await _setCredentials(credentials);
+      await _saveCredentials(credentials);
       grant.close();
-      return right(unit);
+      return right(credentials);
     } on AuthorizationException catch (e) {
       return left(
         AuthFailure.server('${e.error}: ${e.description}'),
       );
     } on PlatformException catch (e) {
       return left(
-        AuthFailure.storage('${e.code}: ${e.details}'),
+        AuthFailure.storage('${e.code}: ${e.message}'),
       );
     }
   }
 
   /// Returns a new set of refreshed credentials.
-  Future<Either<AuthFailure, Credentials>> _refreshCredentials(
+  Future<Either<AuthFailure, Credentials>> refreshCredentials(
     Credentials oldCredentials,
   ) async {
     try {
       final newCredentials =
           await _remoteService.refreshCredentials(oldCredentials);
-      await _setCredentials(newCredentials);
+      await _saveCredentials(newCredentials);
 
       return right(newCredentials);
     } on AuthorizationException catch (e) {
@@ -112,8 +106,8 @@ class AuthRepository {
       final json = await _localService.read();
 
       final credentials = Credentials.fromJson(json!);
-      await _remoteService.signout(credentials);
       await _clearCredentials();
+      await _remoteService.signout(credentials);
       return right(unit);
     } on AuthorizationException catch (e) {
       return left(
@@ -124,15 +118,5 @@ class AuthRepository {
         AuthFailure.storage('${e.code}: ${e.details}'),
       );
     }
-  }
-
-  Future<void> _clearCredentials() async {
-    await _localService.delete();
-    _cachedCredentials = null;
-  }
-
-  Future<void> _setCredentials(Credentials credentials) async {
-    _cachedCredentials = credentials;
-    await _localService.save(credentials.toJson());
   }
 }

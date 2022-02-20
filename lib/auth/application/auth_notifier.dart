@@ -33,8 +33,8 @@ class AuthNotifier extends StateNotifier<AuthState> {
   Future<void> signout() async {
     final failureOrSuccess = await _repository.signout();
     state = failureOrSuccess.fold(
-      (failure) => AuthState.failure(failure),
-      (r) => const AuthState.unauthenticated(),
+      (l) => const AuthState.unauthenticated(),
+      (r) => const AuthState.authenticated(),
     );
   }
 }
