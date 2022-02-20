@@ -32,13 +32,27 @@ class AuthRepository {
       final json = await _localService.read();
       if (json == null) {
         return left(
-            const AuthFailure.storage('No Credentials was found in storage.'));
+          const AuthFailure.storage('No Credentials was found in storage.'),
+        );
       } else {
         final credentials = Credentials.fromJson(json);
-        return right(credentials);
+        if (credentials.isExpired && credentials.canRefresh) {
+          final refreshedCredentials = await _refreshCredentials(credentials);
+          return refreshedCredentials.fold(
+            (authFailure) => left(authFailure),
+            (credentials) async {
+              await _saveCredentials(credentials);
+              return right(credentials);
+            },
+          );
+        } else {
+          return right(credentials);
+        }
       }
     } on PlatformException catch (e) {
-      return left(AuthFailure.storage('${e.code}: ${e.message}'));
+      return left(
+        AuthFailure.storage('${e.code}: ${e.message}'),
+      );
     }
   }
 
@@ -52,7 +66,8 @@ class AuthRepository {
   ///
   /// Returns [Unit] if the process succeeded.
   Future<Either<AuthFailure, Credentials>> signin(
-      AuthHandler authHandler) async {
+    AuthHandler authHandler,
+  ) async {
     final grant = _remoteService.getGrant();
     final authUri = _remoteService.getAuthUrl(grant);
     final authorizedUri = await authHandler(authUri);
@@ -76,7 +91,7 @@ class AuthRepository {
   }
 
   /// Returns a new set of refreshed credentials.
-  Future<Either<AuthFailure, Credentials>> refreshCredentials(
+  Future<Either<AuthFailure, Credentials>> _refreshCredentials(
     Credentials oldCredentials,
   ) async {
     try {
@@ -101,14 +116,25 @@ class AuthRepository {
   }
 
   /// Note that access token will NOT be revoked if there's no internet connection.
-  Future<Either<AuthFailure, Unit>> signout() async {
-    try {
-      final json = await _localService.read();
-
-      final credentials = Credentials.fromJson(json!);
+  Future<Either<AuthFailure, Unit>> signout(
+    Credentials? cachedCredentials,
+  ) async {
+    Future<void> revokeAndClearCredentials(Credentials credentials) async {
       await _clearCredentials();
       await _remoteService.signout(credentials);
-      return right(unit);
+    }
+
+    try {
+      if (cachedCredentials == null) {
+        final json = await _localService.read();
+
+        final credentials = Credentials.fromJson(json!);
+        revokeAndClearCredentials(credentials);
+        return right(unit);
+      } else {
+        revokeAndClearCredentials(cachedCredentials);
+        return right(unit);
+      }
     } on AuthorizationException catch (e) {
       return left(
         AuthFailure.server('${e.error}: ${e.description}'),
