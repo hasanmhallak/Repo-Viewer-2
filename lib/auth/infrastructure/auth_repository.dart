@@ -26,28 +26,83 @@ class AuthRepository {
     await _localService.save(credentials.toJson());
   }
 
-  /// Returns [Credentials] or [AuthFailure].
-  Future<Either<AuthFailure, Credentials>> getCredentials() async {
+  /// Returns a new set of refreshed credentials.
+  Future<Either<AuthFailure, Credentials>> _refreshCredentials(
+    Credentials oldCredentials,
+  ) async {
     try {
-      final json = await _localService.read();
-      if (json == null) {
+      //
+      if (oldCredentials.isExpired && oldCredentials.canRefresh) {
+        final newCredentials =
+            await _remoteService.refreshCredentials(oldCredentials);
+        await _saveCredentials(newCredentials);
+        return right(newCredentials);
+        //
+      } else if (oldCredentials.isExpired && !oldCredentials.canRefresh) {
+        //
         return left(
-          const AuthFailure.storage('No Credentials was found in storage.'),
+          const AuthFailure.server("Credentials can't be refreshed."),
         );
+        //
       } else {
-        final credentials = Credentials.fromJson(json);
-        if (credentials.isExpired && credentials.canRefresh) {
-          final refreshedCredentials = await _refreshCredentials(credentials);
-          return refreshedCredentials.fold(
-            (authFailure) => left(authFailure),
-            (credentials) async {
-              await _saveCredentials(credentials);
-              return right(credentials);
-            },
+        //
+        return right(oldCredentials);
+        //
+      }
+    } on AuthorizationException catch (e) {
+      return left(
+        AuthFailure.server('${e.error}: ${e.description}'),
+      );
+    } on FormatException catch (e) {
+      return left(
+        AuthFailure.server(e.message),
+      );
+    } on PlatformException catch (e) {
+      return left(
+        AuthFailure.storage('${e.code}: ${e.details}'),
+      );
+    }
+  }
+
+  /// A shortcut to achieve DRY principal.
+  Future<Either<AuthFailure, Credentials>> _refreshAndReturnCredentials(
+    Credentials credentials,
+  ) async {
+    final refreshedCredentials = await _refreshCredentials(credentials);
+    return refreshedCredentials.fold(
+      (authFailure) => left(authFailure),
+      (credentials) async {
+        await _saveCredentials(credentials);
+        return right(credentials);
+      },
+    );
+  }
+
+  /// Returns a set of updated [Credentials].
+  Future<Either<AuthFailure, Credentials>> getOrUpdateCredentials(
+    Credentials? cachedCredentials,
+  ) async {
+    try {
+      if (cachedCredentials == null) {
+        //
+        final json = await _localService.read();
+        //
+        if (json == null) {
+          //
+          return left(
+            const AuthFailure.storage('No Credentials was found in storage.'),
           );
+          //
         } else {
-          return right(credentials);
+          //
+          final credentials = Credentials.fromJson(json);
+          return _refreshAndReturnCredentials(credentials);
+          //
         }
+      } else {
+        //
+        return _refreshAndReturnCredentials(cachedCredentials);
+        //
       }
     } on PlatformException catch (e) {
       return left(
@@ -90,31 +145,6 @@ class AuthRepository {
     }
   }
 
-  /// Returns a new set of refreshed credentials.
-  Future<Either<AuthFailure, Credentials>> _refreshCredentials(
-    Credentials oldCredentials,
-  ) async {
-    try {
-      final newCredentials =
-          await _remoteService.refreshCredentials(oldCredentials);
-      await _saveCredentials(newCredentials);
-
-      return right(newCredentials);
-    } on AuthorizationException catch (e) {
-      return left(
-        AuthFailure.server('${e.error}: ${e.description}'),
-      );
-    } on FormatException catch (e) {
-      return left(
-        AuthFailure.server(e.message),
-      );
-    } on PlatformException catch (e) {
-      return left(
-        AuthFailure.storage('${e.code}: ${e.details}'),
-      );
-    }
-  }
-
   /// Note that access token will NOT be revoked if there's no internet connection.
   Future<Either<AuthFailure, Unit>> signout(
     Credentials? cachedCredentials,
@@ -126,14 +156,17 @@ class AuthRepository {
 
     try {
       if (cachedCredentials == null) {
+        //
         final json = await _localService.read();
-
         final credentials = Credentials.fromJson(json!);
         revokeAndClearCredentials(credentials);
         return right(unit);
+        //
       } else {
+        //
         revokeAndClearCredentials(cachedCredentials);
         return right(unit);
+        //
       }
     } on AuthorizationException catch (e) {
       return left(
