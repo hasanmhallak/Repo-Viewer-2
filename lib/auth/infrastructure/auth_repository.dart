@@ -16,14 +16,14 @@ class AuthRepository {
   ///
   /// Can throw [PlatformException].
   Future<void> _clearCredentials() async {
-    await _localService.delete();
+    await _localService.deleteCredentials();
   }
 
   /// Saves credentials to local service.
   ///
   /// Can throw [PlatformException].
   Future<void> _saveCredentials(Credentials credentials) async {
-    await _localService.save(credentials.toJson());
+    await _localService.saveCredentials(credentials.toJson());
   }
 
   /// Returns a new set of refreshed credentials.
@@ -85,7 +85,7 @@ class AuthRepository {
     try {
       if (cachedCredentials == null) {
         //
-        final json = await _localService.read();
+        final json = await _localService.readCredentials();
         //
         if (json == null) {
           //
@@ -157,7 +157,7 @@ class AuthRepository {
     try {
       if (cachedCredentials == null) {
         //
-        final json = await _localService.read();
+        final json = await _localService.readCredentials();
         final credentials = Credentials.fromJson(json!);
         revokeAndClearCredentials(credentials);
         return right(unit);
