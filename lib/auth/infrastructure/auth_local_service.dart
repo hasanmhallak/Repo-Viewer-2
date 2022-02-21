@@ -1,16 +1,31 @@
 abstract class AuthLocalService {
-  /// Encrypts and saves data in local storage.
+  /// Encrypts and saves [Credentials] in local storage.
   ///
   /// Can throw [PlatformException].
-  Future<void> save(String data);
+  Future<void> saveCredentials(String credentials);
 
-  /// Decrypt and returns data or `null` if data is not in the storage.
+  /// Decrypt and returns [Credentials] or `null` if [Credentials] is not in the storage.
   ///
   /// Can throw [PlatformException].
-  Future<String?> read();
+  Future<String?> readCredentials();
 
-  /// Clears local storage.
+  /// Clears [Credentials] from local storage.
   ///
   /// Can throw [PlatformException].
-  Future<void> delete();
+  Future<void> deleteCredentials();
+
+  /// Encrypts and saves `username` in local storage.
+  ///
+  /// Can throw [PlatformException].
+  Future<void> saveUsername(String username);
+
+  /// Decrypt and returns `username` or `null` if `username` is not in the storage.
+  ///
+  /// Can throw [PlatformException].
+  Future<String?> readUsername();
+
+  /// Clears `username` from local storage.
+  ///
+  /// Can throw [PlatformException].
+  Future<void> deleteUsername();
 }
