@@ -19,12 +19,12 @@ class SecureStorage implements AuthLocalService {
       _storage.write(key: _credentialsKey, value: credentials);
 
   @override
-  Future<void> deleteUsername() => _storage.delete(key: _usernameKey);
+  Future<void> deleteUser() => _storage.delete(key: _usernameKey);
 
   @override
-  Future<String?> readUsername() => _storage.read(key: _usernameKey);
+  Future<String?> readUser() => _storage.read(key: _usernameKey);
 
   @override
-  Future<void> saveUsername(String username) =>
-      _storage.write(key: _usernameKey, value: username);
+  Future<void> saveUser(String user) =>
+      _storage.write(key: _usernameKey, value: user);
 }
