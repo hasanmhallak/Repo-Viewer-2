@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../auth_local_service.dart';
@@ -22,9 +24,19 @@ class SecureStorage implements AuthLocalService {
   Future<void> deleteUser() => _storage.delete(key: _usernameKey);
 
   @override
-  Future<String?> readUser() => _storage.read(key: _usernameKey);
+  Future<Map<String, dynamic>?> readUser() async {
+    final encodedUser = await _storage.read(key: _usernameKey);
+    if (encodedUser == null) {
+      return null;
+    } else {
+      final decodedUser = json.decode(encodedUser);
+      return decodedUser as Map<String, dynamic>;
+    }
+  }
 
   @override
-  Future<void> saveUser(String user) =>
-      _storage.write(key: _usernameKey, value: user);
+  Future<void> saveUser(Map<String, dynamic> user) {
+    final encodedUser = jsonEncode(user);
+    return _storage.write(key: _usernameKey, value: encodedUser);
+  }
 }
