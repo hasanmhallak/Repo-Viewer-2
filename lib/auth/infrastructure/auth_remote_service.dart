@@ -114,6 +114,8 @@ class AuthRemoteService {
     }
   }
 
+  /// Returns [Unit] when there's no internet connection.
+  ///
   /// Can throw [AuthorizationException].
   Future<Either<UserDTO, Unit>> getUserInfo(Credentials credentials) async {
     try {
