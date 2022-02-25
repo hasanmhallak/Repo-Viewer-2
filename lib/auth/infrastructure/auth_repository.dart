@@ -1,10 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:oauth2/oauth2.dart';
-import 'package:repo_viewer/auth/domain/entities/user.dart';
-import 'package:repo_viewer/auth/infrastructure/dtos/user_dto.dart';
 
 import '../domain/entities/auth_failure.dart';
+import '../domain/entities/user.dart';
 import 'auth_local_service.dart';
 import 'auth_remote_service.dart';
 import 'type_defs/type_defs.dart';
@@ -22,20 +21,6 @@ class AuthRepository {
     await _localService.deleteUser();
   }
 
-  /// Saves credentials to local service.
-  ///
-  /// Can throw [PlatformException].
-  Future<void> _saveCredentials(Credentials credentials) async {
-    await _localService.saveCredentials(credentials.toJson());
-  }
-
-  /// Saves user info to local service.
-  ///
-  /// Can throw [PlatformException].
-  Future<void> _saveUserInfo(UserDTO dto) async {
-    await _localService.saveUser(dto.toJson());
-  }
-
   /// Returns a new set of refreshed credentials.
   Future<Either<AuthFailure, Credentials>> _refreshCredentials(
     Credentials oldCredentials,
@@ -45,7 +30,8 @@ class AuthRepository {
       if (oldCredentials.isExpired && oldCredentials.canRefresh) {
         final newCredentials =
             await _remoteService.refreshCredentials(oldCredentials);
-        await _saveCredentials(newCredentials);
+
+        await _localService.saveCredentials(newCredentials);
         return right(newCredentials);
         //
       } else if (oldCredentials.isExpired && !oldCredentials.canRefresh) {
@@ -94,9 +80,9 @@ class AuthRepository {
     try {
       if (cachedCredentials == null) {
         //
-        final json = await _localService.readCredentials();
+        final credentials = await _localService.readCredentials();
         //
-        if (json == null) {
+        if (credentials == null) {
           //
           return left(
             const AuthFailure.storage('No Credentials was found in storage.'),
@@ -104,7 +90,6 @@ class AuthRepository {
           //
         } else {
           //
-          final credentials = Credentials.fromJson(json);
           return _refreshAndReturnCredentials(credentials);
           //
         }
@@ -140,7 +125,7 @@ class AuthRepository {
         grant,
         authorizedUri.queryParameters,
       );
-      await _saveCredentials(credentials);
+      await _localService.saveCredentials(credentials);
       grant.close();
       return right(credentials);
     } on AuthorizationException catch (e) {
@@ -166,10 +151,15 @@ class AuthRepository {
     try {
       if (cachedCredentials == null) {
         //
-        final json = await _localService.readCredentials();
-        final credentials = Credentials.fromJson(json!);
-        revokeAndClearCredentials(credentials);
-        return right(unit);
+        final credentials = await _localService.readCredentials();
+        if (credentials == null) {
+          return left(
+            const AuthFailure.storage('No Credentials was found in storage.'),
+          );
+        } else {
+          revokeAndClearCredentials(credentials);
+          return right(unit);
+        }
         //
       } else {
         //
@@ -193,15 +183,14 @@ class AuthRepository {
   ) async {
     // TODO: implement ETag.
     try {
-      final json = await _localService.readUser();
-      if (json != null) {
-        final dto = UserDTO.fromJson(json);
+      final dto = await _localService.readUser();
+      if (dto != null) {
         return right(User.fromDTO(dto));
       } else {
         final userInfoOrUnit = await _remoteService.getUserInfo(credentials);
         return userInfoOrUnit.fold(
           (userInfo) async {
-            await _saveUserInfo(userInfo);
+            await _localService.saveUser(userInfo);
 
             return right(User.fromDTO(userInfo));
           },
