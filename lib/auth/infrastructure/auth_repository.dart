@@ -1,6 +1,8 @@
 import 'package:dartz/dartz.dart';
 import 'package:flutter/services.dart';
 import 'package:oauth2/oauth2.dart';
+import 'package:repo_viewer/auth/domain/entities/user.dart';
+import 'package:repo_viewer/auth/infrastructure/dtos/user_dto.dart';
 
 import '../domain/entities/auth_failure.dart';
 import 'auth_local_service.dart';
@@ -12,11 +14,12 @@ class AuthRepository {
   final AuthRemoteService _remoteService;
   AuthRepository(this._localService, this._remoteService);
 
-  /// Clears credentials form local service.
+  /// Clears user info form local service.
   ///
   /// Can throw [PlatformException].
-  Future<void> _clearCredentials() async {
+  Future<void> _clearUserInfo() async {
     await _localService.deleteCredentials();
+    await _localService.deleteUser();
   }
 
   /// Saves credentials to local service.
@@ -24,6 +27,13 @@ class AuthRepository {
   /// Can throw [PlatformException].
   Future<void> _saveCredentials(Credentials credentials) async {
     await _localService.saveCredentials(credentials.toJson());
+  }
+
+  /// Saves user info to local service.
+  ///
+  /// Can throw [PlatformException].
+  Future<void> _saveUserInfo(UserDTO dto) async {
+    await _localService.saveUser(dto.toJson());
   }
 
   /// Returns a new set of refreshed credentials.
@@ -71,8 +81,7 @@ class AuthRepository {
     final refreshedCredentials = await _refreshCredentials(credentials);
     return refreshedCredentials.fold(
       (authFailure) => left(authFailure),
-      (credentials) async {
-        await _saveCredentials(credentials);
+      (credentials) {
         return right(credentials);
       },
     );
@@ -150,7 +159,7 @@ class AuthRepository {
     Credentials? cachedCredentials,
   ) async {
     Future<void> revokeAndClearCredentials(Credentials credentials) async {
-      await _clearCredentials();
+      await _clearUserInfo();
       await _remoteService.signout(credentials);
     }
 
@@ -172,6 +181,37 @@ class AuthRepository {
       return left(
         AuthFailure.server('${e.error}: ${e.description}'),
       );
+    } on PlatformException catch (e) {
+      return left(
+        AuthFailure.storage('${e.code}: ${e.details}'),
+      );
+    }
+  }
+
+  Future<Either<AuthFailure, User>> getOrUpdateUserInfo(
+    Credentials credentials,
+  ) async {
+    // TODO: implement ETag.
+    try {
+      final json = await _localService.readUser();
+      if (json != null) {
+        final dto = UserDTO.fromJson(json);
+        return right(User.fromDTO(dto));
+      } else {
+        final userInfoOrUnit = await _remoteService.getUserInfo(credentials);
+        return userInfoOrUnit.fold(
+          (userInfo) async {
+            await _saveUserInfo(userInfo);
+
+            return right(User.fromDTO(userInfo));
+          },
+          (unit) {
+            return left(const AuthFailure.server('No internet connection.'));
+          },
+        );
+      }
+    } on AuthorizationException catch (e) {
+      return left(AuthFailure.server('${e.error}: ${e.description}'));
     } on PlatformException catch (e) {
       return left(
         AuthFailure.storage('${e.code}: ${e.details}'),
