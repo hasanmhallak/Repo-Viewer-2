@@ -1,8 +1,9 @@
 import 'dart:convert';
 
 import 'package:oauth2/oauth2.dart';
-import 'package:repo_viewer/auth/infrastructure/database/secure_database.dart';
-import 'package:repo_viewer/auth/infrastructure/dtos/user_dto.dart';
+
+import 'database/secure_database.dart';
+import 'dtos/user_dto.dart';
 
 class AuthLocalService {
   final SecureDatabase _database;
