@@ -16,7 +16,7 @@ class AuthRepository {
   /// Clears user info form local service.
   ///
   /// Can throw [PlatformException].
-  Future<void> _clearUserInfo() async {
+  Future<void> _clearData() async {
     await _localService.deleteCredentials();
     await _localService.deleteUser();
   }
@@ -60,19 +60,6 @@ class AuthRepository {
     }
   }
 
-  /// A shortcut to achieve DRY principal.
-  Future<Either<AuthFailure, Credentials>> _refreshAndReturnCredentials(
-    Credentials credentials,
-  ) async {
-    final refreshedCredentials = await _refreshCredentials(credentials);
-    return refreshedCredentials.fold(
-      (authFailure) => left(authFailure),
-      (credentials) {
-        return right(credentials);
-      },
-    );
-  }
-
   /// Returns a set of updated [Credentials].
   Future<Either<AuthFailure, Credentials>> getOrUpdateCredentials(
     Credentials? cachedCredentials,
@@ -90,12 +77,12 @@ class AuthRepository {
           //
         } else {
           //
-          return _refreshAndReturnCredentials(credentials);
+          return _refreshCredentials(credentials);
           //
         }
       } else {
         //
-        return _refreshAndReturnCredentials(cachedCredentials);
+        return _refreshCredentials(cachedCredentials);
         //
       }
     } on PlatformException catch (e) {
@@ -144,7 +131,7 @@ class AuthRepository {
     Credentials? cachedCredentials,
   ) async {
     Future<void> revokeAndClearCredentials(Credentials credentials) async {
-      await _clearUserInfo();
+      await _clearData();
       await _remoteService.signout(credentials);
     }
 
