@@ -1,15 +1,17 @@
 import 'package:dio/dio.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:repo_viewer/auth/infrastructure/auth_local_service.dart';
 
 import '../application/auth_notifier.dart';
 import '../application/auth_state.dart';
-import '../domain/auth_repository.dart';
 import '../infrastructure/auth_remote_service.dart';
-import '../infrastructure/credentials_storage/secure_storage.dart';
+import '../infrastructure/auth_repository.dart';
+import '../infrastructure/database/secure_storage.dart';
 
 final authRepository = Provider<AuthRepository>((ref) {
   final _dio = Dio();
-  const _localService = SecureStorage();
+  const _secureDatabase = SecureStorage();
+  final _localService = AuthLocalService(_secureDatabase);
   final _remoteService = AuthRemoteService(_dio);
   return AuthRepository(_localService, _remoteService);
 });

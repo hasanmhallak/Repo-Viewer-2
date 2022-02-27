@@ -22,8 +22,7 @@ class AppWidget extends ConsumerWidget {
         authenticated: () {
           _appRouter.pushAndPopUntil(
             StarredReposRoute(
-              signout: ref.read(authNotifier.notifier).signout() as Future<void>
-                  Function(),
+              signout: ref.read(authNotifier.notifier).signout,
             ),
             predicate: (route) => false,
           );
