@@ -11,3 +11,8 @@ analyzer:
     parameter_assignments: error
     sort_unnamed_constructors_first: ignore
     sort_pub_dependencies: ignore
+  exclude: 
+    - '**.freezed.dart'
+    - '**.g.dart'
+    - '**.gr.dart'
+    - '**/generated_plugin_registrant.dart'
