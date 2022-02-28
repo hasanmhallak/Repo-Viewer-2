@@ -4,7 +4,7 @@ import 'package:sizer/sizer.dart';
 
 import '../../auth/application/auth_state.dart';
 import '../../auth/providers/providers.dart';
-import '../../repos/core/providers/provider.dart';
+// import '../../repos/core/providers/provider.dart';
 import 'routes/app_router.dart';
 
 class AppWidget extends ConsumerWidget {
@@ -13,8 +13,7 @@ class AppWidget extends ConsumerWidget {
   void _authenticated(WidgetRef provider) {
     _appRouter.pushAndPopUntil(
       StarredReposRoute(
-        signout: provider.read(authNotifier.notifier).signout() as Future<void>
-            Function(),
+        signout: provider.read(authNotifier.notifier).signout,
       ),
       predicate: (route) => false,
     );
@@ -29,7 +28,7 @@ class AppWidget extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef provider) {
-    provider.listen(initializationProvider, (previous, next) {});
+    // provider.listen(initializationProvider, (previous, next) {});
     provider.read(authNotifier.notifier).checkAndUpdateAuthState();
     provider.listen<AuthState>(authNotifier, (previous, next) {
       next.maybeWhen(

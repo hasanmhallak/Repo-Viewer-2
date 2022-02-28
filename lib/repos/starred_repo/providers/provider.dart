@@ -12,14 +12,17 @@ import '../infrastructure/starred_remote_service.dart';
 final starredRepositoryProvider = Provider<StarredRepository>((ref) {
   const _config = PaginationConfig();
   const apiStore = GitlabApi(_config);
+
   final headersDatabase = DataBase.stringStore(
     ref.watch(sembastProvider),
     'headers',
   );
+
   final reposDatabase = DataBase.integerStore(
     ref.watch(sembastProvider),
     'starredRepos',
   );
+
   final headersLocalService = HeadersLocalService(headersDatabase);
   final localService = StarredLocalService(reposDatabase, _config);
   final dio = ref.watch(dioForStarredProvider);
