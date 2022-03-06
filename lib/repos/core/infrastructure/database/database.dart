@@ -1,5 +1,5 @@
-import './database_impl.dart';
 import 'sembast_database.dart';
+import 'store_impl.dart';
 
 abstract class DataBase {
   /// Returns [DataBase] instance which stores data with key as `int` and value as Map.
