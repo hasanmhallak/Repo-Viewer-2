@@ -9,29 +9,50 @@ import '../domain/starred_repository.dart';
 import '../infrastructure/starred_local_service.dart';
 import '../infrastructure/starred_remote_service.dart';
 
-final starredRepositoryProvider = Provider<StarredRepository>((ref) {
-  const _config = PaginationConfig();
-  const apiStore = GitlabApi(_config);
+final paginationConfigProvider = Provider<PaginationConfig>((ref) {
+  return const PaginationConfig();
+});
+final apiStoreProvider = Provider<GitlabApi>((ref) {
+  return const GitlabApi();
+});
 
-  final headersDatabase = DataBase.stringStore(
+final headerDatabaseProvider = Provider<DataBase>((ref) {
+  return DataBase.stringStore(
     ref.watch(sembastProvider),
     'headers',
   );
+});
 
-  final reposDatabase = DataBase.integerStore(
+final reposDatabseProvider = Provider<DataBase>((ref) {
+  return DataBase.integerStore(
     ref.watch(sembastProvider),
     'starredRepos',
   );
+});
 
-  final headersLocalService = HeadersLocalService(headersDatabase);
-  final localService = StarredLocalService(reposDatabase, _config);
-  final dio = ref.watch(dioForStarredProvider);
-  final remoteService = StarredRemoteService(dio, _config);
+final headersLocalServiceProvider = Provider<HeadersLocalService>((ref) {
+  return HeadersLocalService(ref.watch(headerDatabaseProvider));
+});
 
+final localServiceProvider = Provider<StarredLocalService>((ref) {
+  return StarredLocalService(
+    ref.watch(reposDatabseProvider),
+    ref.watch(paginationConfigProvider),
+  );
+});
+
+final remoteServiceProvider = Provider<StarredRemoteService>((ref) {
+  return StarredRemoteService(
+    ref.watch(dioForStarredProvider),
+    ref.watch(paginationConfigProvider),
+  );
+});
+
+final starredRepositoryProvider = Provider<StarredRepository>((ref) {
   return StarredRepository(
-    apiStore: apiStore,
-    headersLocalService: headersLocalService,
-    localService: localService,
-    remoteService: remoteService,
+    apiStore: ref.watch(apiStoreProvider),
+    headersLocalService: ref.watch(headersLocalServiceProvider),
+    localService: ref.watch(localServiceProvider),
+    remoteService: ref.watch(remoteServiceProvider),
   );
 });
