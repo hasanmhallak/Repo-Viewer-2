@@ -23,9 +23,10 @@ class _$StarredStateTearOff {
     );
   }
 
-  _Loading loading(Fresh<List<Repo>> freshRepos) {
+  _Loading loading(Fresh<List<Repo>> freshRepos, int itemsPerPage) {
     return _Loading(
       freshRepos,
+      itemsPerPage,
     );
   }
 
@@ -53,7 +54,8 @@ mixin _$StarredState {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Fresh<List<Repo>> freshRepos) initial,
-    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)
+        loading,
     required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
     required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
         failure,
@@ -62,7 +64,7 @@ mixin _$StarredState {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -71,7 +73,7 @@ mixin _$StarredState {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -215,7 +217,8 @@ class _$_Initial extends _Initial {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Fresh<List<Repo>> freshRepos) initial,
-    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)
+        loading,
     required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
     required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
         failure,
@@ -227,7 +230,7 @@ class _$_Initial extends _Initial {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -239,7 +242,7 @@ class _$_Initial extends _Initial {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -306,7 +309,7 @@ abstract class _$LoadingCopyWith<$Res> implements $StarredStateCopyWith<$Res> {
   factory _$LoadingCopyWith(_Loading value, $Res Function(_Loading) then) =
       __$LoadingCopyWithImpl<$Res>;
   @override
-  $Res call({Fresh<List<Repo>> freshRepos});
+  $Res call({Fresh<List<Repo>> freshRepos, int itemsPerPage});
 
   @override
   $FreshCopyWith<List<Repo>, $Res> get freshRepos;
@@ -324,12 +327,17 @@ class __$LoadingCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
   @override
   $Res call({
     Object? freshRepos = freezed,
+    Object? itemsPerPage = freezed,
   }) {
     return _then(_Loading(
       freshRepos == freezed
           ? _value.freshRepos
           : freshRepos // ignore: cast_nullable_to_non_nullable
               as Fresh<List<Repo>>,
+      itemsPerPage == freezed
+          ? _value.itemsPerPage
+          : itemsPerPage // ignore: cast_nullable_to_non_nullable
+              as int,
     ));
   }
 }
@@ -337,14 +345,16 @@ class __$LoadingCopyWithImpl<$Res> extends _$StarredStateCopyWithImpl<$Res>
 /// @nodoc
 
 class _$_Loading extends _Loading {
-  const _$_Loading(this.freshRepos) : super._();
+  const _$_Loading(this.freshRepos, this.itemsPerPage) : super._();
 
   @override
   final Fresh<List<Repo>> freshRepos;
+  @override
+  final int itemsPerPage;
 
   @override
   String toString() {
-    return 'StarredState.loading(freshRepos: $freshRepos)';
+    return 'StarredState.loading(freshRepos: $freshRepos, itemsPerPage: $itemsPerPage)';
   }
 
   @override
@@ -353,12 +363,16 @@ class _$_Loading extends _Loading {
         (other.runtimeType == runtimeType &&
             other is _Loading &&
             const DeepCollectionEquality()
-                .equals(other.freshRepos, freshRepos));
+                .equals(other.freshRepos, freshRepos) &&
+            const DeepCollectionEquality()
+                .equals(other.itemsPerPage, itemsPerPage));
   }
 
   @override
-  int get hashCode =>
-      Object.hash(runtimeType, const DeepCollectionEquality().hash(freshRepos));
+  int get hashCode => Object.hash(
+      runtimeType,
+      const DeepCollectionEquality().hash(freshRepos),
+      const DeepCollectionEquality().hash(itemsPerPage));
 
   @JsonKey(ignore: true)
   @override
@@ -369,38 +383,39 @@ class _$_Loading extends _Loading {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Fresh<List<Repo>> freshRepos) initial,
-    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)
+        loading,
     required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
     required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
         failure,
   }) {
-    return loading(freshRepos);
+    return loading(freshRepos, itemsPerPage);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
   }) {
-    return loading?.call(freshRepos);
+    return loading?.call(freshRepos, itemsPerPage);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
     required TResult orElse(),
   }) {
     if (loading != null) {
-      return loading(freshRepos);
+      return loading(freshRepos, itemsPerPage);
     }
     return orElse();
   }
@@ -444,11 +459,13 @@ class _$_Loading extends _Loading {
 }
 
 abstract class _Loading extends StarredState {
-  const factory _Loading(Fresh<List<Repo>> freshRepos) = _$_Loading;
+  const factory _Loading(Fresh<List<Repo>> freshRepos, int itemsPerPage) =
+      _$_Loading;
   const _Loading._() : super._();
 
   @override
   Fresh<List<Repo>> get freshRepos;
+  int get itemsPerPage;
   @override
   @JsonKey(ignore: true)
   _$LoadingCopyWith<_Loading> get copyWith =>
@@ -523,7 +540,8 @@ class _$_Loaded extends _Loaded {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Fresh<List<Repo>> freshRepos) initial,
-    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)
+        loading,
     required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
     required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
         failure,
@@ -535,7 +553,7 @@ class _$_Loaded extends _Loaded {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -547,7 +565,7 @@ class _$_Loaded extends _Loaded {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -694,7 +712,8 @@ class _$_Failure extends _Failure {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function(Fresh<List<Repo>> freshRepos) initial,
-    required TResult Function(Fresh<List<Repo>> freshRepos) loading,
+    required TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)
+        loading,
     required TResult Function(Fresh<List<Repo>> freshRepos) loaded,
     required TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)
         failure,
@@ -706,7 +725,7 @@ class _$_Failure extends _Failure {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
@@ -718,7 +737,7 @@ class _$_Failure extends _Failure {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function(Fresh<List<Repo>> freshRepos)? initial,
-    TResult Function(Fresh<List<Repo>> freshRepos)? loading,
+    TResult Function(Fresh<List<Repo>> freshRepos, int itemsPerPage)? loading,
     TResult Function(Fresh<List<Repo>> freshRepos)? loaded,
     TResult Function(RepoFailure failure, Fresh<List<Repo>> freshRepos)?
         failure,
