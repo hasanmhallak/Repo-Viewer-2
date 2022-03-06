@@ -17,8 +17,12 @@ final _privateConstructorUsedError = UnsupportedError(
 class _$StarredEventTearOff {
   const _$StarredEventTearOff();
 
-  _GetNextPage getNextPage() {
-    return const _GetNextPage();
+  GetNextPage getNextPage() {
+    return const GetNextPage();
+  }
+
+  Retry retry() {
+    return const Retry();
   }
 }
 
@@ -30,32 +34,38 @@ mixin _$StarredEvent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getNextPage,
+    required TResult Function() retry,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? getNextPage,
+    TResult Function()? retry,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getNextPage,
+    TResult Function()? retry,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetNextPage value) getNextPage,
+    required TResult Function(GetNextPage value) getNextPage,
+    required TResult Function(Retry value) retry,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_GetNextPage value)? getNextPage,
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetNextPage value)? getNextPage,
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -78,27 +88,27 @@ class _$StarredEventCopyWithImpl<$Res> implements $StarredEventCopyWith<$Res> {
 }
 
 /// @nodoc
-abstract class _$GetNextPageCopyWith<$Res> {
-  factory _$GetNextPageCopyWith(
-          _GetNextPage value, $Res Function(_GetNextPage) then) =
-      __$GetNextPageCopyWithImpl<$Res>;
+abstract class $GetNextPageCopyWith<$Res> {
+  factory $GetNextPageCopyWith(
+          GetNextPage value, $Res Function(GetNextPage) then) =
+      _$GetNextPageCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$GetNextPageCopyWithImpl<$Res> extends _$StarredEventCopyWithImpl<$Res>
-    implements _$GetNextPageCopyWith<$Res> {
-  __$GetNextPageCopyWithImpl(
-      _GetNextPage _value, $Res Function(_GetNextPage) _then)
-      : super(_value, (v) => _then(v as _GetNextPage));
+class _$GetNextPageCopyWithImpl<$Res> extends _$StarredEventCopyWithImpl<$Res>
+    implements $GetNextPageCopyWith<$Res> {
+  _$GetNextPageCopyWithImpl(
+      GetNextPage _value, $Res Function(GetNextPage) _then)
+      : super(_value, (v) => _then(v as GetNextPage));
 
   @override
-  _GetNextPage get _value => super._value as _GetNextPage;
+  GetNextPage get _value => super._value as GetNextPage;
 }
 
 /// @nodoc
 
-class _$_GetNextPage extends _GetNextPage {
-  const _$_GetNextPage() : super._();
+class _$GetNextPage extends GetNextPage {
+  const _$GetNextPage() : super._();
 
   @override
   String toString() {
@@ -108,7 +118,7 @@ class _$_GetNextPage extends _GetNextPage {
   @override
   bool operator ==(dynamic other) {
     return identical(this, other) ||
-        (other.runtimeType == runtimeType && other is _GetNextPage);
+        (other.runtimeType == runtimeType && other is GetNextPage);
   }
 
   @override
@@ -118,6 +128,7 @@ class _$_GetNextPage extends _GetNextPage {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
     required TResult Function() getNextPage,
+    required TResult Function() retry,
   }) {
     return getNextPage();
   }
@@ -126,6 +137,7 @@ class _$_GetNextPage extends _GetNextPage {
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
     TResult Function()? getNextPage,
+    TResult Function()? retry,
   }) {
     return getNextPage?.call();
   }
@@ -134,6 +146,7 @@ class _$_GetNextPage extends _GetNextPage {
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
     TResult Function()? getNextPage,
+    TResult Function()? retry,
     required TResult orElse(),
   }) {
     if (getNextPage != null) {
@@ -145,7 +158,8 @@ class _$_GetNextPage extends _GetNextPage {
   @override
   @optionalTypeArgs
   TResult map<TResult extends Object?>({
-    required TResult Function(_GetNextPage value) getNextPage,
+    required TResult Function(GetNextPage value) getNextPage,
+    required TResult Function(Retry value) retry,
   }) {
     return getNextPage(this);
   }
@@ -153,7 +167,8 @@ class _$_GetNextPage extends _GetNextPage {
   @override
   @optionalTypeArgs
   TResult? mapOrNull<TResult extends Object?>({
-    TResult Function(_GetNextPage value)? getNextPage,
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
   }) {
     return getNextPage?.call(this);
   }
@@ -161,7 +176,8 @@ class _$_GetNextPage extends _GetNextPage {
   @override
   @optionalTypeArgs
   TResult maybeMap<TResult extends Object?>({
-    TResult Function(_GetNextPage value)? getNextPage,
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
     required TResult orElse(),
   }) {
     if (getNextPage != null) {
@@ -171,7 +187,110 @@ class _$_GetNextPage extends _GetNextPage {
   }
 }
 
-abstract class _GetNextPage extends StarredEvent {
-  const factory _GetNextPage() = _$_GetNextPage;
-  const _GetNextPage._() : super._();
+abstract class GetNextPage extends StarredEvent {
+  const factory GetNextPage() = _$GetNextPage;
+  const GetNextPage._() : super._();
+}
+
+/// @nodoc
+abstract class $RetryCopyWith<$Res> {
+  factory $RetryCopyWith(Retry value, $Res Function(Retry) then) =
+      _$RetryCopyWithImpl<$Res>;
+}
+
+/// @nodoc
+class _$RetryCopyWithImpl<$Res> extends _$StarredEventCopyWithImpl<$Res>
+    implements $RetryCopyWith<$Res> {
+  _$RetryCopyWithImpl(Retry _value, $Res Function(Retry) _then)
+      : super(_value, (v) => _then(v as Retry));
+
+  @override
+  Retry get _value => super._value as Retry;
+}
+
+/// @nodoc
+
+class _$Retry extends Retry {
+  const _$Retry() : super._();
+
+  @override
+  String toString() {
+    return 'StarredEvent.retry()';
+  }
+
+  @override
+  bool operator ==(dynamic other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType && other is Retry);
+  }
+
+  @override
+  int get hashCode => runtimeType.hashCode;
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function() getNextPage,
+    required TResult Function() retry,
+  }) {
+    return retry();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult Function()? getNextPage,
+    TResult Function()? retry,
+  }) {
+    return retry?.call();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function()? getNextPage,
+    TResult Function()? retry,
+    required TResult orElse(),
+  }) {
+    if (retry != null) {
+      return retry();
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(GetNextPage value) getNextPage,
+    required TResult Function(Retry value) retry,
+  }) {
+    return retry(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
+  }) {
+    return retry?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(GetNextPage value)? getNextPage,
+    TResult Function(Retry value)? retry,
+    required TResult orElse(),
+  }) {
+    if (retry != null) {
+      return retry(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class Retry extends StarredEvent {
+  const factory Retry() = _$Retry;
+  const Retry._() : super._();
 }
