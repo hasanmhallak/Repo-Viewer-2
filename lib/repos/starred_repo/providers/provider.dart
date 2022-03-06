@@ -5,9 +5,9 @@ import '../../core/infrastructure/database/database.dart';
 import '../../core/infrastructure/headers_local_service.dart';
 import '../../core/infrastructure/pagination_config.dart';
 import '../../core/providers/provider.dart';
-import '../domain/starred_repository.dart';
 import '../infrastructure/starred_local_service.dart';
 import '../infrastructure/starred_remote_service.dart';
+import '../infrastructure/starred_repository.dart';
 
 final paginationConfigProvider = Provider<PaginationConfig>((ref) {
   return const PaginationConfig();
