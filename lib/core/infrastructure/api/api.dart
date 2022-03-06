@@ -1,17 +1,16 @@
 import '../../../repos/core/infrastructure/pagination_config.dart';
 
 class GitlabApi {
-  final PaginationConfig _config;
-  const GitlabApi(this._config);
+  const GitlabApi();
 
   Uri starredReposUri(int page) {
     return Uri.https(
-      'gitlab.com/api/v4',
-      '/users/user_name/starred_projects',
+      'gitlab.com',
+      '/api/v4/users/user_name/starred_projects',
       {
-        'page': page,
-        'per_page': _config.itemsPerPage,
-        'simple': true,
+        'page': page.toString(),
+        'per_page': PaginationConfig.itemsPerPage.toString(),
+        'simple': true.toString(),
       },
     );
   }
