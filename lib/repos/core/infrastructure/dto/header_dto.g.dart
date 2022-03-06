@@ -7,15 +7,9 @@ part of 'header_dto.dart';
 // **************************************************************************
 
 _$_HeaderDTO _$$_HeaderDTOFromJson(Map<String, dynamic> json) => _$_HeaderDTO(
-      url: json['url'] == null
-          ? ''
-          : _stringFromJson(json['url'] as List<String>),
-      etag: json['Etag'] == null
-          ? ''
-          : _stringFromJson(json['Etag'] as List<String>),
-      nextPage: json['X-Next-Page'] == null
-          ? 0
-          : _nextPageFromJson(json['X-Next-Page'] as List<String>),
+      url: json['url'] as String? ?? '',
+      etag: json['Etag'] as String? ?? '',
+      nextPage: json['X-Next-Page'] as int? ?? 0,
     );
 
 Map<String, dynamic> _$$_HeaderDTOToJson(_$_HeaderDTO instance) =>
