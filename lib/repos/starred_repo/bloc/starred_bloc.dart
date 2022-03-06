@@ -1,5 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:repo_viewer/repos/core/domain/fresh.dart';
+import 'package:repo_viewer/repos/core/infrastructure/pagination_config.dart';
 import 'package:repo_viewer/repos/starred_repo/domain/repo.dart';
 import 'package:repo_viewer/repos/starred_repo/domain/starred_repository.dart';
 
@@ -16,24 +17,41 @@ class StarredBloc extends Bloc<StarredEvent, StarredState> {
   final StarredRepository _repository;
   int _page = 1;
   StarredBloc(this._repository) : super(StarredState.initial(Fresh.no([]))) {
-    on<StarredEvent>((event, emit) {
-      _getNextPage(_page, emit);
+    on<GetNextPage>((event, emit) async {
+      await _getPage(_page, emit);
+      state.maybeWhen(
+        orElse: () {},
+        loaded: (_) {
+          return _.isNextPageAvailable ? _page++ : null;
+        },
+      );
+    });
+    on<Retry>((event, emit) async {
+      await _getPage(_page, emit);
+      state.maybeWhen(
+        orElse: () {},
+        loaded: (_) {
+          return _.isNextPageAvailable ? _page++ : null;
+        },
+      );
     });
   }
 
-  Future _getNextPage(int page, Emitter<StarredState> emit) async {
-    emit(StarredState.loading(state.freshRepos));
+  Future _getPage(int page, Emitter<StarredState> emit) async {
+    emit(
+      StarredState.loading(state.freshRepos, PaginationConfig.itemsPerPage),
+    );
+
     final failureOrSuccess = await _repository.getStarredReposPage(page);
     emit(
       failureOrSuccess.fold(
         (failure) {
           return StarredState.failure(
             failure,
-            state.freshRepos,
+            state.freshRepos.copyWith(isNextPageAvailable: false),
           );
         },
         (freshRepos) {
-          if (freshRepos.isNextPageAvailable) _page++;
           final newFreshRepos = addNewReposToOldReposList(freshRepos);
           return StarredState.loaded(newFreshRepos);
         },
