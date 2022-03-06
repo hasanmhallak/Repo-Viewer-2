@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:repo_viewer/repos/core/domain/fresh.dart';
-import 'package:repo_viewer/repos/core/infrastructure/pagination_config.dart';
-import 'package:repo_viewer/repos/starred_repo/domain/repo.dart';
-import 'package:repo_viewer/repos/starred_repo/infrastructure/starred_repository.dart';
 
+import '../../core/domain/fresh.dart';
+import '../../core/infrastructure/pagination_config.dart';
+import '../domain/repo.dart';
+import '../infrastructure/starred_repository.dart';
 import 'starred_event.dart';
 import 'starred_state.dart';
 
