@@ -13,7 +13,7 @@ class Repo with _$Repo {
     required int id,
     required String name,
     required String description,
-    required int starCount,
+    required String starCount,
     required String avatarUrl,
   }) = _Repo;
 

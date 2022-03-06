@@ -22,7 +22,7 @@ class _$RepoTearOff {
       required int id,
       required String name,
       required String description,
-      required int starCount,
+      required String starCount,
       required String avatarUrl}) {
     return _Repo(
       index: index,
@@ -44,7 +44,7 @@ mixin _$Repo {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  int get starCount => throw _privateConstructorUsedError;
+  String get starCount => throw _privateConstructorUsedError;
   String get avatarUrl => throw _privateConstructorUsedError;
 
   @JsonKey(ignore: true)
@@ -60,7 +60,7 @@ abstract class $RepoCopyWith<$Res> {
       int id,
       String name,
       String description,
-      int starCount,
+      String starCount,
       String avatarUrl});
 }
 
@@ -101,7 +101,7 @@ class _$RepoCopyWithImpl<$Res> implements $RepoCopyWith<$Res> {
       starCount: starCount == freezed
           ? _value.starCount
           : starCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       avatarUrl: avatarUrl == freezed
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -120,7 +120,7 @@ abstract class _$RepoCopyWith<$Res> implements $RepoCopyWith<$Res> {
       int id,
       String name,
       String description,
-      int starCount,
+      String starCount,
       String avatarUrl});
 }
 
@@ -162,7 +162,7 @@ class __$RepoCopyWithImpl<$Res> extends _$RepoCopyWithImpl<$Res>
       starCount: starCount == freezed
           ? _value.starCount
           : starCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       avatarUrl: avatarUrl == freezed
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -192,7 +192,7 @@ class _$_Repo extends _Repo {
   @override
   final String description;
   @override
-  final int starCount;
+  final String starCount;
   @override
   final String avatarUrl;
 
@@ -237,7 +237,7 @@ abstract class _Repo extends Repo {
       required int id,
       required String name,
       required String description,
-      required int starCount,
+      required String starCount,
       required String avatarUrl}) = _$_Repo;
   const _Repo._() : super._();
 
@@ -250,7 +250,7 @@ abstract class _Repo extends Repo {
   @override
   String get description;
   @override
-  int get starCount;
+  String get starCount;
   @override
   String get avatarUrl;
   @override
