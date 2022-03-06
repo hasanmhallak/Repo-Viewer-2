@@ -33,5 +33,8 @@ final authInterceptorProvider = Provider<AuthInterceptor>(
 /// Dio instance with [Interceptor] setup to add [Credentials] & [Username]
 /// to every request.
 final dioWithStarredInterceptor = Provider<Dio>(
-  (ref) => Dio()..interceptors.add(ref.watch(authInterceptorProvider)),
+  (ref) => Dio()
+    ..interceptors.add(ref.watch(authInterceptorProvider))
+    ..options.validateStatus =
+        (statusCode) => statusCode == 200 || statusCode == 304,
 );
