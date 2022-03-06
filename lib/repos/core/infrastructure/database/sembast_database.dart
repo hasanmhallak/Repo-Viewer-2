@@ -3,10 +3,10 @@ import 'package:path_provider/path_provider.dart';
 import 'package:sembast/sembast.dart';
 import 'package:sembast/sembast_io.dart';
 
-import 'database.dart';
-
 class SembastDatabase {
   late Database _instance;
+  Database get instance => _instance;
+
   bool _hasBeenInitialized = false;
 
   /// initialize database.
@@ -15,6 +15,7 @@ class SembastDatabase {
       return;
     } else {
       final directory = await getApplicationDocumentsDirectory();
+      directory.create(recursive: true);
       final dbPath = join(directory.path, 'db.sembast');
       _instance = await databaseFactoryIo.openDatabase(dbPath);
       _hasBeenInitialized = true;
@@ -24,74 +25,5 @@ class SembastDatabase {
   /// Closes database.
   Future<void> closeDb() {
     return _instance.close();
-  }
-}
-
-class SembastDbStore implements DataBase {
-  final SembastDatabase _db;
-  late StoreRef _store;
-  SembastDbStore.integerStore(this._db, String name) {
-    _store = intMapStoreFactory.store(name);
-  }
-
-  SembastDbStore.stringStore(this._db, String name) {
-    _store = stringMapStoreFactory.store(name);
-  }
-
-  @override
-  Future<void> saveRecords(
-    List<dynamic> keys,
-    List<Map<String, dynamic>> values,
-  ) async {
-    await _store.records(keys).put(_db._instance, values);
-  }
-
-  @override
-  Future<void> saveRecord(
-    dynamic key,
-    Map<String, dynamic> value,
-  ) async {
-    await _store.record(key).put(_db._instance, value);
-  }
-
-  @override
-  Future<Map<String, dynamic>?> getRecord(dynamic key) async {
-    return await _store.record(key).get(_db._instance) as Map<String, dynamic>?;
-  }
-
-  @override
-  Future<List<Map<String, dynamic>>> getRecords(List<dynamic> keys) async {
-    return await _store.records(keys).get(_db._instance)
-        as List<Map<String, dynamic>>;
-  }
-
-  @override
-  Future<List<Map<String, dynamic>>> findRecords({
-    int? offset,
-    int? limit,
-  }) async {
-    final records = await _store.find(
-      _db._instance,
-      finder: Finder(
-        offset: offset,
-        limit: limit,
-      ),
-    );
-    return records.map((e) => e.value as Map<String, dynamic>).toList();
-  }
-
-  @override
-  Future<void> deleteRecords(List<dynamic> keys) async {
-    await _store.records(keys).delete(_db._instance);
-  }
-
-  @override
-  Future<void> deleteRecord(dynamic key) async {
-    await _store.record(key).delete(_db._instance);
-  }
-
-  @override
-  Future<int> countRecords() async {
-    return _store.count(_db._instance);
   }
 }
