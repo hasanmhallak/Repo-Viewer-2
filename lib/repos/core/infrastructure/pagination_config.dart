@@ -7,8 +7,8 @@ import '../../starred_repo/infrastructure/repo_dto.dart';
 class PaginationConfig {
   const PaginationConfig();
 
-  static const _itemsPerPage = 30;
-  int get itemsPerPage => _itemsPerPage;
+  static const itemsPerPage = 10;
+  // static int get itemsPerPage => _itemsPerPage;
 
   /// Returns an `int` which will be used as a key in the database.
   int getDatabaseKey(int serverIndex, int serverPage) {
@@ -25,13 +25,13 @@ class PaginationConfig {
   int calculateDatabasePageFromServerPage(int serverPage) => serverPage - 1;
 
   List<RepoDTO> addPaginationToResponse(
-    List<Map<String, dynamic>> data,
+    List<dynamic> data,
     int serverPage,
   ) {
     return data.mapIndexed(
       (index, data) {
         data['index'] = getDatabaseKey(index, serverPage);
-        return RepoDTO.fromJson(data);
+        return RepoDTO.fromJson(data as Map<String, dynamic>);
       },
     ).toList();
   }
