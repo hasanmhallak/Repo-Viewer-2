@@ -78,7 +78,8 @@ class StarredRemoteService {
     int page,
     HeaderDTO headersDTO,
   ) {
-    data as List<Map<String, dynamic>>;
+    data as List<dynamic>;
+    // TODO: move this to DTO.
     final convertedData = _config.addPaginationToResponse(data, page);
     return RemoteResponse.withData(
       headers: headersDTO,
