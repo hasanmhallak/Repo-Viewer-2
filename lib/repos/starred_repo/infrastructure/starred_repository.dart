@@ -6,10 +6,10 @@ import '../../core/domain/repo_failure.dart';
 import '../../core/infrastructure/dto/header_dto.dart';
 import '../../core/infrastructure/headers_local_service.dart';
 import '../../core/infrastructure/helper_classes/rest_api_exception.dart';
-import '../infrastructure/repo_dto.dart';
-import '../infrastructure/starred_local_service.dart';
-import '../infrastructure/starred_remote_service.dart';
-import 'repo.dart';
+import 'repo_dto.dart';
+import 'starred_local_service.dart';
+import 'starred_remote_service.dart';
+import '../domain/repo.dart';
 
 class StarredRepository {
   final StarredRemoteService _remoteService;
