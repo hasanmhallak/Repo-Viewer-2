@@ -1,9 +1,9 @@
-// ignore: depend_on_referenced_packages, implementation_imports
+// ignore_for_file: depend_on_referenced_packages
+
 import 'package:collection/src/list_extensions.dart';
 
 import '../../starred_repo/infrastructure/repo_dto.dart';
 
-// ignore: avoid_classes_with_only_static_members
 class PaginationConfig {
   const PaginationConfig();
 
