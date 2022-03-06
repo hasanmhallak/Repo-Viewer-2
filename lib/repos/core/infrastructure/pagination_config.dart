@@ -8,7 +8,6 @@ class PaginationConfig {
   const PaginationConfig();
 
   static const itemsPerPage = 10;
-  // static int get itemsPerPage => _itemsPerPage;
 
   /// Returns an `int` which will be used as a key in the database.
   int getDatabaseKey(int serverIndex, int serverPage) {
