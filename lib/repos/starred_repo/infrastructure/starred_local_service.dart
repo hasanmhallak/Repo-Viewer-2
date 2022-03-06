@@ -22,7 +22,7 @@ class StarredLocalService {
   /// Gets a page from local storage.
   Future<List<RepoDTO>> getPage(int serverPage) async {
     final records = await _db.findRecords(
-      limit: _config.itemsPerPage,
+      limit: PaginationConfig.itemsPerPage,
       offset: _config.getOffset(serverPage),
     );
     return records.map((e) => RepoDTO.fromJson(e)).toList();
