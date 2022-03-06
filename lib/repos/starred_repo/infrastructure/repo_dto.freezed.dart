@@ -26,8 +26,10 @@ class _$RepoDTOTearOff {
       required int id,
       required String name,
       required String description,
-      @JsonKey(name: 'star_count') required int starCount,
-      @JsonKey(name: 'avatar_url') required String avatarUrl}) {
+      @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+          required String starCount,
+      @JsonKey(name: 'avatar_url')
+          required String avatarUrl}) {
     return _RepoDTO(
       index: index,
       id: id,
@@ -52,8 +54,8 @@ mixin _$RepoDTO {
   int get id => throw _privateConstructorUsedError;
   String get name => throw _privateConstructorUsedError;
   String get description => throw _privateConstructorUsedError;
-  @JsonKey(name: 'star_count')
-  int get starCount => throw _privateConstructorUsedError;
+  @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+  String get starCount => throw _privateConstructorUsedError;
   @JsonKey(name: 'avatar_url')
   String get avatarUrl => throw _privateConstructorUsedError;
 
@@ -71,7 +73,7 @@ abstract class $RepoDTOCopyWith<$Res> {
       int id,
       String name,
       String description,
-      @JsonKey(name: 'star_count') int starCount,
+      @JsonKey(name: 'star_count', fromJson: _formatStarCount) String starCount,
       @JsonKey(name: 'avatar_url') String avatarUrl});
 }
 
@@ -112,7 +114,7 @@ class _$RepoDTOCopyWithImpl<$Res> implements $RepoDTOCopyWith<$Res> {
       starCount: starCount == freezed
           ? _value.starCount
           : starCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       avatarUrl: avatarUrl == freezed
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -131,7 +133,7 @@ abstract class _$RepoDTOCopyWith<$Res> implements $RepoDTOCopyWith<$Res> {
       int id,
       String name,
       String description,
-      @JsonKey(name: 'star_count') int starCount,
+      @JsonKey(name: 'star_count', fromJson: _formatStarCount) String starCount,
       @JsonKey(name: 'avatar_url') String avatarUrl});
 }
 
@@ -173,7 +175,7 @@ class __$RepoDTOCopyWithImpl<$Res> extends _$RepoDTOCopyWithImpl<$Res>
       starCount: starCount == freezed
           ? _value.starCount
           : starCount // ignore: cast_nullable_to_non_nullable
-              as int,
+              as String,
       avatarUrl: avatarUrl == freezed
           ? _value.avatarUrl
           : avatarUrl // ignore: cast_nullable_to_non_nullable
@@ -190,8 +192,10 @@ class _$_RepoDTO extends _RepoDTO {
       required this.id,
       required this.name,
       required this.description,
-      @JsonKey(name: 'star_count') required this.starCount,
-      @JsonKey(name: 'avatar_url') required this.avatarUrl})
+      @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+          required this.starCount,
+      @JsonKey(name: 'avatar_url')
+          required this.avatarUrl})
       : super._();
 
   factory _$_RepoDTO.fromJson(Map<String, dynamic> json) =>
@@ -206,8 +210,8 @@ class _$_RepoDTO extends _RepoDTO {
   @override
   final String description;
   @override
-  @JsonKey(name: 'star_count')
-  final int starCount;
+  @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+  final String starCount;
   @override
   @JsonKey(name: 'avatar_url')
   final String avatarUrl;
@@ -258,8 +262,10 @@ abstract class _RepoDTO extends RepoDTO {
       required int id,
       required String name,
       required String description,
-      @JsonKey(name: 'star_count') required int starCount,
-      @JsonKey(name: 'avatar_url') required String avatarUrl}) = _$_RepoDTO;
+      @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+          required String starCount,
+      @JsonKey(name: 'avatar_url')
+          required String avatarUrl}) = _$_RepoDTO;
   const _RepoDTO._() : super._();
 
   factory _RepoDTO.fromJson(Map<String, dynamic> json) = _$_RepoDTO.fromJson;
@@ -273,8 +279,8 @@ abstract class _RepoDTO extends RepoDTO {
   @override
   String get description;
   @override
-  @JsonKey(name: 'star_count')
-  int get starCount;
+  @JsonKey(name: 'star_count', fromJson: _formatStarCount)
+  String get starCount;
   @override
   @JsonKey(name: 'avatar_url')
   String get avatarUrl;

@@ -11,7 +11,7 @@ _$_RepoDTO _$$_RepoDTOFromJson(Map<String, dynamic> json) => _$_RepoDTO(
       id: json['id'] as int,
       name: json['name'] as String,
       description: json['description'] as String,
-      starCount: json['star_count'] as int,
+      starCount: _formatStarCount(json['star_count'] as Object),
       avatarUrl: json['avatar_url'] as String,
     );
 
