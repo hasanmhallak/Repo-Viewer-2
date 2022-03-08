@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+import 'package:repo_viewer/repos/core/presentation/toast.dart';
 
 import '../bloc/starred_bloc.dart';
 import '../providers/provider.dart';
@@ -43,6 +44,7 @@ class PaginatedRepos extends StatefulWidget {
 
 class _PaginatedReposState extends State<PaginatedRepos> {
   bool _canLoadNextPage = false;
+  bool hasAlreadyShownToast = false;
 
   @override
   void initState() {
@@ -75,7 +77,16 @@ class _PaginatedReposState extends State<PaginatedRepos> {
           state.map(
             initial: (_) => _canLoadNextPage = false,
             loading: (_) => _canLoadNextPage = false,
-            loaded: (_) => _canLoadNextPage = _.freshRepos.isNextPageAvailable,
+            loaded: (_) {
+              if (!_.freshRepos.isFresh && !hasAlreadyShownToast) {
+                hasAlreadyShownToast = true;
+                showToast(
+                  context,
+                  "You're not online. some information may be outdated.",
+                );
+              }
+              return _canLoadNextPage = _.freshRepos.isNextPageAvailable;
+            },
             failure: (_) => _canLoadNextPage = _.freshRepos.isNextPageAvailable,
           );
         },
