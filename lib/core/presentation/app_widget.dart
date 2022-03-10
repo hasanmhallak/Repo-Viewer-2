@@ -1,3 +1,4 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:sizer/sizer.dart';
@@ -43,7 +44,10 @@ class AppWidget extends ConsumerWidget {
         return MaterialApp.router(
           // useInheritedMediaQuery: true,
           // locale: DevicePreview.locale(context),
-          // builder: DevicePreview.appBuilder,
+          builder: (context, child) {
+            final navigatorKey = _appRouter.navigatorKey;
+            return child = Toast(navigatorKey: navigatorKey, child: child!);
+          },
           title: 'Repo Viewer',
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,
