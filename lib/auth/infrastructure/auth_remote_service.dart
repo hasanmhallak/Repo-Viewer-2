@@ -19,7 +19,7 @@ class AuthRemoteService {
 
   final _revokeEndpoint = Uri.parse('https://gitlab.com/oauth/revoke');
 
-  final _scopes = ['read_user', 'read_repository'];
+  final _scopes = ['api', 'read_user'];
 
   final _usernameUri = Uri.parse('https://gitlab.com/api/v4/user');
 

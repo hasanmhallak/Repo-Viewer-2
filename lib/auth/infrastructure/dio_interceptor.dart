@@ -19,7 +19,7 @@ class AuthInterceptor extends Interceptor {
         ..headers.addAll(
           {'Authorization': 'bearer ${credentials.accessToken}'},
         )
-        ..path.replaceFirst(RegExp('user_name'), user.username);
+        ..path = options.path.replaceFirst(RegExp('user_name'), user.username);
       handler.next(modifiedOptions);
     } else {
       return;
