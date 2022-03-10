@@ -1,7 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import '../domain/repo.dart';
+import 'custom_avatar.dart';
 
 class RepoTile extends StatelessWidget {
   final Repo _repo;
@@ -13,8 +13,8 @@ class RepoTile extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: CachedNetworkImageProvider(_repo.avatarUrl),
+      leading: CustomAvatar(
+        url: _repo.avatarUrl,
         backgroundColor: Colors.white.withOpacity(0),
       ),
       title: Text(_repo.name),
