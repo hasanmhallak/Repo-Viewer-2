@@ -1,5 +1,4 @@
-// ignore_for_file: depend_on_referenced_packages
-
+// ignore_for_file: depend_on_referenced_packages, implementation_imports
 import 'package:collection/src/list_extensions.dart';
 
 import '../../starred_repo/infrastructure/repo_dto.dart';

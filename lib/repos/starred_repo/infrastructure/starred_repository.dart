@@ -93,7 +93,6 @@ class StarredRepository {
     HeaderDTO headers,
     bool isNextPageAvailable,
   ) async {
-    print('Fresh data.');
     // saving headers.
     await _headersLocalService.saveHeaders(headers);
     // updating local service.
