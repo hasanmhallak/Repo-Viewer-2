@@ -1,7 +1,7 @@
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
-import 'package:repo_viewer/repos/core/presentation/toast.dart';
 
 import '../bloc/starred_bloc.dart';
 import '../providers/provider.dart';
@@ -80,8 +80,7 @@ class _PaginatedReposState extends State<PaginatedRepos> {
             loaded: (_) {
               if (!_.freshRepos.isFresh && !hasAlreadyShownToast) {
                 hasAlreadyShownToast = true;
-                showToast(
-                  context,
+                context.showToast(
                   "You're not online. some information may be outdated.",
                 );
               }
