@@ -28,7 +28,7 @@ class _$RepoDTOTearOff {
       required String description,
       @JsonKey(name: 'star_count', fromJson: _formatStarCount)
           required String starCount,
-      @JsonKey(name: 'avatar_url')
+      @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
           required String avatarUrl}) {
     return _RepoDTO(
       index: index,
@@ -56,7 +56,7 @@ mixin _$RepoDTO {
   String get description => throw _privateConstructorUsedError;
   @JsonKey(name: 'star_count', fromJson: _formatStarCount)
   String get starCount => throw _privateConstructorUsedError;
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
   String get avatarUrl => throw _privateConstructorUsedError;
 
   Map<String, dynamic> toJson() => throw _privateConstructorUsedError;
@@ -74,7 +74,7 @@ abstract class $RepoDTOCopyWith<$Res> {
       String name,
       String description,
       @JsonKey(name: 'star_count', fromJson: _formatStarCount) String starCount,
-      @JsonKey(name: 'avatar_url') String avatarUrl});
+      @JsonKey(name: 'avatar_url', fromJson: _checkForNull) String avatarUrl});
 }
 
 /// @nodoc
@@ -134,7 +134,7 @@ abstract class _$RepoDTOCopyWith<$Res> implements $RepoDTOCopyWith<$Res> {
       String name,
       String description,
       @JsonKey(name: 'star_count', fromJson: _formatStarCount) String starCount,
-      @JsonKey(name: 'avatar_url') String avatarUrl});
+      @JsonKey(name: 'avatar_url', fromJson: _checkForNull) String avatarUrl});
 }
 
 /// @nodoc
@@ -194,7 +194,7 @@ class _$_RepoDTO extends _RepoDTO {
       required this.description,
       @JsonKey(name: 'star_count', fromJson: _formatStarCount)
           required this.starCount,
-      @JsonKey(name: 'avatar_url')
+      @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
           required this.avatarUrl})
       : super._();
 
@@ -213,7 +213,7 @@ class _$_RepoDTO extends _RepoDTO {
   @JsonKey(name: 'star_count', fromJson: _formatStarCount)
   final String starCount;
   @override
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
   final String avatarUrl;
 
   @override
@@ -264,7 +264,7 @@ abstract class _RepoDTO extends RepoDTO {
       required String description,
       @JsonKey(name: 'star_count', fromJson: _formatStarCount)
           required String starCount,
-      @JsonKey(name: 'avatar_url')
+      @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
           required String avatarUrl}) = _$_RepoDTO;
   const _RepoDTO._() : super._();
 
@@ -282,7 +282,7 @@ abstract class _RepoDTO extends RepoDTO {
   @JsonKey(name: 'star_count', fromJson: _formatStarCount)
   String get starCount;
   @override
-  @JsonKey(name: 'avatar_url')
+  @JsonKey(name: 'avatar_url', fromJson: _checkForNull)
   String get avatarUrl;
   @override
   @JsonKey(ignore: true)

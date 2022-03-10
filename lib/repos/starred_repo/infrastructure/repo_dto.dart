@@ -19,6 +19,10 @@ String _formatStarCount(Object starCount) {
   }
 }
 
+String _checkForNull(String? avatarUrl) {
+  return avatarUrl ?? '';
+}
+
 @freezed
 class RepoDTO with _$RepoDTO {
   const RepoDTO._();
@@ -29,7 +33,11 @@ class RepoDTO with _$RepoDTO {
     required String description,
     @JsonKey(name: 'star_count', fromJson: _formatStarCount)
         required String starCount,
-    @JsonKey(name: 'avatar_url') required String avatarUrl,
+    @JsonKey(
+      name: 'avatar_url',
+      fromJson: _checkForNull,
+    )
+        required String avatarUrl,
   }) = _RepoDTO;
 
   factory RepoDTO.fromJson(Map<String, dynamic> json) =>

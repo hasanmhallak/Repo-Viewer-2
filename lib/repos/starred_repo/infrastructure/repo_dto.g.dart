@@ -12,7 +12,7 @@ _$_RepoDTO _$$_RepoDTOFromJson(Map<String, dynamic> json) => _$_RepoDTO(
       name: json['name'] as String,
       description: json['description'] as String,
       starCount: _formatStarCount(json['star_count'] as Object),
-      avatarUrl: json['avatar_url'] as String,
+      avatarUrl: _checkForNull(json['avatar_url'] as String?),
     );
 
 Map<String, dynamic> _$$_RepoDTOToJson(_$_RepoDTO instance) =>
